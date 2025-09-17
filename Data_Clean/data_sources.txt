@@ -1,0 +1,5 @@
+US State shape file:
+https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html
+
+Example maple syrup data:
+https://www.uvm.edu/femc/data/archive/project/sugarmaple_production/dataset/maple-syrup-production/
