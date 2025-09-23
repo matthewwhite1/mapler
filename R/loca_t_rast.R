@@ -12,8 +12,12 @@
 #'
 #' @export
 loca_t_rast <- function(filepath, scenario = c("historical", "ssp585")) {
-  # Check if directory exists
-  if (!dir.exists(filepath)) {
+  # Error checking
+  if (!is.character(filepath) | length(filepath) != 1) {
+    stop("filepath must be a character vector of length 1.")
+  } else if (!is.character(scenario)) {
+    stop("scenario must be a character vector.")
+  } else if (!dir.exists(filepath)) {
     stop("Given directory does not exist.")
   }
 
@@ -32,9 +36,20 @@ loca_t_rast <- function(filepath, scenario = c("historical", "ssp585")) {
 
   # For each folder...
   for (i in seq_along(scenario_folders)) {
+    # Create file path strings
+    tmax_folder <- file.path(scenario_folders[i], "tasmax")
+    tmin_folder <- file.path(scenario_folders[i], "tasmin")
+
+    # Make sure file paths exist
+    if (!dir.exists(tmax_folder)) {
+      stop(paste0("tasmax folder does not exist within scenario ", period))
+    } else if (!dir.exists(tmin_folder)) {
+      stop(paste0("tasmin folder does not exist within scenario ", period))
+    }
+
     # List netCDF files
-    tmax_files <- list.files(file.path(scenario_folders[i], "tasmax"), full.names = TRUE)
-    tmin_files <- list.files(file.path(scenario_folders[i], "tasmin"), full.names = TRUE)
+    tmax_files <- list.files(tmax_folder, full.names = TRUE)
+    tmin_files <- list.files(tmin_folder, full.names = TRUE)
 
     # Skip if no valid files are found
     if (length(tmax_files) == 0 || length(tmin_files) == 0) {

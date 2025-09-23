@@ -10,13 +10,12 @@
 #'
 #' @export
 prism_t_rast <- function(filepath, folders = TRUE) {
-  # Check if directory exists
-  if (!dir.exists(filepath)) {
+  # Error checking
+  if (!is.character(filepath) | length(filepath) != 1) {
+    stop("filepath must be a character vector of length 1.")
+  } else if (!dir.exists(filepath)) {
     stop("Given directory does not exist.")
-  }
-
-  # Ensure folders argument is logical
-  if (!is.logical(folders)) {
+  } else if (!is.logical(folders) | length(folders) != 1) {
     stop("Folders argument must either be TRUE or FALSE.")
   }
 
