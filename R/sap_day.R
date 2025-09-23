@@ -19,13 +19,15 @@
 #'   will be used in a logical statement to find ideal sap tapping days.
 #' @param t_lower The lower temperature value for the freeze/thaw cycle that
 #'   will be used in a logical statement to find ideal sap tapping days.
+#' @param years An integer vector of years to subset the raster stacks by. All
+#'   of the years must be present in the raster stacks.
 #'
 #' @return A list of length two - a raster stack of the proportion of ideal
 #'   sap tapping days per year, and a raster stack of the sum of ideal sap
 #'   tapping days per year.
 #'
 #' @export
-sap_day <- function(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1) {
+sap_day <- function(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1, years = NULL) {
   # Error checking
   if (class(tmax_rast) != "SpatRaster" || class(tmin_rast) != "SpatRaster") {
     stop("tmax_rast and tmin_rast must be terra rasters.")
@@ -38,9 +40,13 @@ sap_day <- function(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1) {
   }
 
   # Extract years for subsetting
-  dates <- terra::time(tmax_rast)
-  years <- as.integer(stringr::str_extract(dates, "[[:digit:]]{4}"))
-  unique_years <- sort(unique(years))
+  if (!is.null(years)) {
+    unique_years <- years
+  } else {
+    dates <- terra::time(tmax_rast)
+    years <- as.integer(stringr::str_extract(dates, "[[:digit:]]{4}"))
+    unique_years <- sort(unique(years))
+  }
 
   # Initialize empty lists
   sap_prop_list <- vector("list", length(unique_years))
