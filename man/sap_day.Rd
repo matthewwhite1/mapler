@@ -4,7 +4,7 @@
 \alias{sap_day}
 \title{Calculate Ideal Sap Days from Temperature Rasters}
 \usage{
-sap_day(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1)
+sap_day(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1, years = NULL)
 }
 \arguments{
 \item{tmax_rast}{A raster stack of tmax values that must have terra::time
@@ -18,6 +18,9 @@ will be used in a logical statement to find ideal sap tapping days.}
 
 \item{t_lower}{The lower temperature value for the freeze/thaw cycle that
 will be used in a logical statement to find ideal sap tapping days.}
+
+\item{years}{An integer vector of years to subset the raster stacks by. All
+of the years must be present in the raster stacks.}
 }
 \value{
 A list of length two - a raster stack of the proportion of ideal
