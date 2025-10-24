@@ -44,13 +44,15 @@ for (i in seq_along(farm_links)) {
     rvest::html_text2()
   names <- c(names, farm_name)
   addresses <- c(addresses, farm_address)
+
+  # Print progress
+  print(paste0("Finished ", farm_links[i]))
 }
 
 # Remove country for geocoding
 addresses <- stringr::str_remove(addresses, ", Canada")
 
 # Create data frame
-quebec_farms <- data.frame(farm = names, address = addresses, state = rep(NA, 85), region = rep(NA, 85))
+quebec_farms <- data.frame(farm = names, address = addresses, state = rep("CNQC", 85), region = rep(NA, 85))
 
-# Write csv
-write.csv(quebec_farms, "Data_Clean/quebec_farms.csv")
+usethis::use_data(quebec_farms, overwrite = TRUE)

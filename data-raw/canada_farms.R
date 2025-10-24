@@ -71,12 +71,14 @@ for (province in provinces) {
     addresses <- c(addresses, farm_addresses)
     states <- c(states, rep(prov, length(farm_names)))
     regions <- c(regions, rep(region, length(farm_names)))
+
+    # Print progress
+    print(paste0("Finished ", region_link))
   }
 }
 
 # Create data frame with removed duplicates
-canada_farms_df <- data.frame(farm = farms, address = addresses, state = states, region = regions) |>
+canada_farms <- data.frame(farm = farms, address = addresses, state = states, region = regions) |>
   dplyr::distinct(farm, .keep_all = TRUE)
 
-# Write to farms combined with output from other farms script
-write.csv(rbind(farms_df, canada_farms_df), "Data_Clean/farms.csv")
+usethis::use_data(canada_farms, overwrite = TRUE)

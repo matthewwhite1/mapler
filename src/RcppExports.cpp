@@ -23,7 +23,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // sens_slope_rcpp
-List sens_slope_rcpp(NumericVector x, NumericVector t, double conf_level);
+NumericVector sens_slope_rcpp(NumericVector x, NumericVector t, double conf_level);
 RcppExport SEXP _mapler_sens_slope_rcpp(SEXP xSEXP, SEXP tSEXP, SEXP conf_levelSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

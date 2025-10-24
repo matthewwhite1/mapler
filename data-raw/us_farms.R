@@ -70,8 +70,13 @@ for (state in us_states) {
     addresses <- c(addresses, farm_addresses)
     states <- c(states, rep(state, length(farm_names)))
     regions <- c(regions, rep(region, length(farm_names)))
+
+    # Print progress
+    print(paste0("Finished ", region_link))
   }
 }
 
 # Create data frame
-farms_df <- data.frame(farm = farms, address = addresses, state = states, region = regions)
+us_farms <- data.frame(farm = farms, address = addresses, state = states, region = regions)
+
+usethis::use_data(us_farms, overwrite = TRUE)

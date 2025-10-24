@@ -14,7 +14,7 @@ int mkScore(NumericVector x, int n) {
 }
 
 // [[Rcpp::export]]
-List sens_slope_rcpp(NumericVector x, NumericVector t, double conf_level = 0.95) {
+NumericVector sens_slope_rcpp(NumericVector x, NumericVector t, double conf_level = 0.95) {
   int n = x.length();
 
   // varmk
@@ -59,12 +59,9 @@ List sens_slope_rcpp(NumericVector x, NumericVector t, double conf_level = 0.95)
 
   NumericVector cint = {lo, up};
 
-  List ans = List::create(
-    Named("estimates") = NumericVector::create(Named("Sen's slope") = b_sen),
-    Named("statistic") = NumericVector::create(Named("z") = z),
-    Named("p.value") = pval,
-    Named("parameter") = NumericVector::create(Named("n") = n),
-    Named("conf.int") = cint
-  );
+  double n_double = n;
+
+  NumericVector ans = {b_sen, z, pval, n_double, cint[0], cint[1]};
+
   return(ans);
 }

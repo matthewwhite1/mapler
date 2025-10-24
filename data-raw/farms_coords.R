@@ -1,9 +1,7 @@
 library(tidyverse)
 
 # Get farms coordinates
-farms <- read.csv("Data_Clean/farms.csv")
-quebec_farms <- read.csv("Data_Clean/quebec_farms.csv")
-farms <- rbind(farms, quebec_farms)
+farms <- rbind(us_farms, canada_farms, quebec_farms)
 farms_coords <- tidygeocoder::geocode(farms, address = address)
 farms_coords_valid <- farms_coords |>
   filter(!is.na(lat))
@@ -11,11 +9,13 @@ farms_coords_invalid <- farms_coords |>
   filter(is.na(lat))
 
 # Get coordinates of streets for invalid coordinates
-farms_coords_invalid_us <- farms_coords_invalid[1:117, ] |>
+farms_coords_invalid_us <- farms_coords_invalid |>
+  filter(str_detect(state, "^[A-Z]{2}$")) |>
   mutate(address = str_remove(address, "^\\d+\\s?")) |>
   mutate(address = str_remove(address, ",.+,")) |>
   select(-c(lat, long))
-farms_coords_invalid_cn <- farms_coords_invalid[118:134, ] |>
+farms_coords_invalid_cn <- farms_coords_invalid |>
+  filter(str_detect(state, "^[A-Z]{4}$")) |>
   mutate(address = str_remove(address, "^\\d+,?\\s.+?,")) |>
   select(-c(lat, long))
 farms_coords_invalid <- rbind(farms_coords_invalid_us, farms_coords_invalid_cn)
@@ -24,7 +24,6 @@ farms_coords_2 <- farms_coords_2 |>
   filter(!is.na(lat))
 
 # Combine into valid coords
-farms_combined <- rbind(farms_coords_valid, farms_coords_2)
+farms_coords <- rbind(farms_coords_valid, farms_coords_2)
 
-# Write coordinates
-write.csv(farms_combined, "Data_Clean/farms_coords.csv")
+usethis::use_data(farms_coords, overwrite = TRUE)

@@ -78,7 +78,12 @@ sens_slope <- function(x, conf.level = 0.95)
   na.fail(x)
   t <- table(x)
   output <- sens_slope_rcpp(x, t, conf.level)
-  attr(output$conf.int, "conf.level") <- conf.level
-  output
+  named_output <- list("estimates" = c("Sen's slope" = output[1]),
+                    "statistic" = c("z" = output[2]),
+                    "p.value" = output[3],
+                    "parameter" = c("n" = output[4]),
+                    "conf.int" = output[5:6])
+  attr(named_output$conf.int, "conf.level") <- conf.level
+  named_output
 }
 
