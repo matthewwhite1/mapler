@@ -1,4 +1,5 @@
-#' Get an sf data frame of maple farms' Sen's slope grouped by shapefile variable
+#' Get an sf data frame of maple farms' Sen's slope grouped by shapefile
+#'   variable
 #'
 #' This function takes an sf dataframe probably outputted by [get_sens_farms()]
 #' or [get_sens_significance()].
@@ -7,31 +8,29 @@
 #' contains the significance averages for each group and the corresponding
 #' shapefile boundaries - this can be plotted with something like ggplot.
 #'
-#' @param farms_sf An sf dataframe containing the time series of sap day proportions
-#'   for each year, the geometry, the Sen's slope estimate, the Sen's slope
-#'   p-value, and the significance problem, probably outputted by [get_sens_significance()].
-#' @param shapefile An sf dataframe containing geographical shape boundaries.
-#' @param variable A character vector of length 1 containing the name of the
-#'   variable within the shapefile dataframe to group by.
-#' @param sap_prop A terra SpatRaster containing yearly sap day proportion
-#'   rasters.
+#' @param farms_sf sf dataframe containing the time series of sap day
+#'   proportions for each year, the geometry, the Sen's slope estimate,
+#'   the Sen's slope p-value, and the significance value,
+#'   probably outputted by [get_sens_significance()]
+#' @param shapefile sf dataframe containing geographical shape boundaries
+#' @param variable character vector of length 1 containing the name of the
+#'   variable within the shapefile dataframe to group by
 #'
-#' @return An sf dataframe that contains the significance averages for each group
+#' @return sf dataframe that contains the significance averages for each group
 #'   and the corresponding shapefile boundaries - this can be plotted with
-#'   something like ggplot.
+#'   something like ggplot
 #'
 #' @export
 get_sens_joined <- function(farms_sf, shapefile, variable) {
   # Error checking
   sf_helper(farms_sf)
-  if (!any(class(shapefile) == "sf") || !any(class(shapefile) == "data.frame")) {
+  if (!any(class(shapefile) == "sf") ||
+      !any(class(shapefile) == "data.frame")) {
     stop("shapefile must have both class sf and data.frame.")
   } else if (!is.character(variable) || length(variable) != 1) {
     stop("variable must be a character vector of length 1.")
   } else if (!any(names(shapefile) == variable)) {
     stop("variable must be the name of a column in the shapefile.")
-  } else if (class(sap_prop) != "SpatRaster") {
-    stop("sap_prop must have class SpatRaster.")
   }
 
   # Join sf objects
@@ -51,16 +50,3 @@ get_sens_joined <- function(farms_sf, shapefile, variable) {
   # Return thing to be plotted
   shapefile_joined
 }
-
-# farms_coords <- read_csv("Data_Clean/farms_coords.csv")
-# farms_coords <- st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
-# shapefile <- read_sf("Data_Clean/NA_Eco_Level3/NA_CEC_Eco_Level3.shp")
-# variable <- names(shapefile)[2]
-# sap_prop <- terra::rast("../loca_sap_weighted.tif")
-# elevation <- terra::rast("Data_Clean/elevation.LOCA_2016-04-02.nc")
-#
-# farms_coords <- read_csv("Data_Clean/farms_coords.csv")
-# farms_coords <- st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
-# shapefile <- counties(cb = TRUE, year = 2020)
-# variable <- "GEOID"
-# sap_prop <- terra::rast("../loca_sap_weighted.tif")

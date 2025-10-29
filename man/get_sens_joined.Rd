@@ -2,27 +2,26 @@
 % Please edit documentation in R/get_sens_joined.R
 \name{get_sens_joined}
 \alias{get_sens_joined}
-\title{Get an sf data frame of maple farms' Sen's slope grouped by shapefile variable}
+\title{Get an sf data frame of maple farms' Sen's slope grouped by shapefile
+variable}
 \usage{
 get_sens_joined(farms_sf, shapefile, variable)
 }
 \arguments{
-\item{farms_sf}{An sf dataframe containing the time series of sap day proportions
-for each year, the geometry, the Sen's slope estimate, the Sen's slope
-p-value, and the significance problem, probably outputted by \code{\link[=get_sens_significance]{get_sens_significance()}}.}
+\item{farms_sf}{sf dataframe containing the time series of sap day
+proportions for each year, the geometry, the Sen's slope estimate,
+the Sen's slope p-value, and the significance value,
+probably outputted by \code{\link[=get_sens_significance]{get_sens_significance()}}}
 
-\item{shapefile}{An sf dataframe containing geographical shape boundaries.}
+\item{shapefile}{sf dataframe containing geographical shape boundaries}
 
-\item{variable}{A character vector of length 1 containing the name of the
-variable within the shapefile dataframe to group by.}
-
-\item{sap_prop}{A terra SpatRaster containing yearly sap day proportion
-rasters.}
+\item{variable}{character vector of length 1 containing the name of the
+variable within the shapefile dataframe to group by}
 }
 \value{
-An sf dataframe that contains the significance averages for each group
+sf dataframe that contains the significance averages for each group
 and the corresponding shapefile boundaries - this can be plotted with
-something like ggplot.
+something like ggplot
 }
 \description{
 This function takes an sf dataframe probably outputted by \code{\link[=get_sens_farms]{get_sens_farms()}}

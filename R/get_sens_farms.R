@@ -1,18 +1,19 @@
-#' Get the Sen's slope estimate and p-value given an sf dataframe of farm locations
+#' Get the Sen's slope estimate and p-value given an sf dataframe of
+#'   farm locations
 #'
 #' This function takes an sf dataframe of (assumed) farm coordinates. Then, it
 #' extracts the time series of yearly sap day proportions for each farm. Sen's
 #' slope is calculated for each time series. The slope estimate and p-value are
 #' added as columns to the extracted data frame.
 #'
-#' @param farms_coords An sf dataframe containing farms and their coordinates.
-#' @param sap_prop A terra SpatRaster containing yearly sap day proportion
-#'   rasters, probably calculated from [sap_day()].
-#' @param elevation A one layer terra SpatRaster containing elevation values.
+#' @param farms_coords sf dataframe containing farms and their coordinates
+#' @param sap_prop terra SpatRaster containing yearly sap day proportion
+#'   rasters, probably calculated from [sap_day()]
+#' @param elevation one layer terra SpatRaster containing elevation values
 #'
-#' @return An sf dataframe containing the time series of sap day proportions
+#' @return sf dataframe containing the time series of sap day proportions
 #'   for each year, the geometry, the Sen's slope estimate, and the Sen's slope
-#'   p-value.
+#'   p-value
 #'
 #' @export
 get_sens_farms <- function(farms_coords, sap_prop, elevation = NULL) {
@@ -47,7 +48,7 @@ get_sens_farms <- function(farms_coords, sap_prop, elevation = NULL) {
 
   # Conduct Sen's and Mann-Kendall test for every farm
   for (i in seq_len(nrow(farms_sf))) {
-    sens_slope <- trend::sens.slope(as.numeric(sf::st_drop_geometry(farms_sf[i, names(sap_prop)])))
+    sens_slope <- sens_slope(as.numeric(sf::st_drop_geometry(farms_sf[i, names(sap_prop)])))
     farms_sf$sens_estimate[i] <- sens_slope$estimates
     farms_sf$sens_p_value[i] <- sens_slope$p.value
 

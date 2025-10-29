@@ -1,22 +1,20 @@
-#' TODO: Where else could this fail? If the servers are down?
-
 #' Download LOCA2 netCDF files
 #'
 #' This function can be used to download daily netCDF files from LOCA2.
 #'
-#' @param model A character vector of models. These must exactly
-#'   match the LOCA2 model names (Ex: "ACCESS-CM2").
-#' @param run An integer vector of model runs. A run of 1 corresponds to the
-#'   first run of the model (r1i1p1f1), a run of 2 corresponds to the second
-#'   run of the model, and so on.
-#' @param scenario A character vector of future climate scenarios. Each value
-#'   in this vector must be either historical, ssp245, ssp370, or ssp585.
-#' @param var A character vector of variables to download. Each value in this
+#' @param model character vector of models. These must exactly
+#'   match the LOCA2 model names (Ex: "ACCESS-CM2")
+#' @param run integer vector of model runs. A run of 1 corresponds to the
+#'   first run of the model (Ex: r1i1p1f1), a run of 2 corresponds to the second
+#'   run of the model, and so on
+#' @param scenario character vector of future climate scenarios. Each value
+#'   in this vector must be either historical, ssp245, ssp370, or ssp585
+#' @param var character vector of variables to download. Each value in this
 #'   vector must be either pr (precipitation), tasmax (maximum temperature),
 #'   tasmin (minimum temperature), or DTR (difference between maximum and
-#'   minimum temperature).
-#' @param out_dir The name of the output directory that will store the
-#'   downloaded files.
+#'   minimum temperature)
+#' @param out_dir name of the output directory that will store the
+#'   downloaded files
 #'
 #' @details When filtering for files to download, this function excludes files
 #'   that include "yearly" or "monthly", and it only downloads files that are
@@ -29,16 +27,18 @@
 #' @source \url{https://cirrus.ucsd.edu/~pierce/LOCA2/NAmer/}
 #'
 #' @examples
+#' \dontrun{
 #' # Download all files from first LOCA2 model
-#' # download_loca2(model = "ACCESS-CM2",
-#' #                run = 1,
-#' #                scenario = "ssp585",
-#' #                var = c("pr", "tasmax", "tasmin"))
+#' download_loca2(model = "ACCESS-CM2",
+#'                run = 1,
+#'                scenario = "ssp585",
+#'                var = c("pr", "tasmax", "tasmin"))
 #'
 #' # Download all files with multiple models, runs, and scenarios
-#' # download_loca2(model = c("ACCESS-CM2", "ACCESS-ESM1-5", "AWI-CM-1-1-MR"),
-#' #                run = c(1, 2, 3),
-#' #                scenario = c("ssp245", "ssp370", "ssp585"))
+#' download_loca2(model = c("ACCESS-CM2", "ACCESS-ESM1-5", "AWI-CM-1-1-MR"),
+#'                run = c(1, 2, 3),
+#'                scenario = c("ssp245", "ssp370", "ssp585"))
+#' }
 #' @export
 download_loca2 <- function(model,
                            run = 1,
@@ -51,7 +51,8 @@ download_loca2 <- function(model,
   # Argument error checking
   if (!is.numeric(run) || !all(run %% 1 == 0)) {
     stop("The run argument must be a positive integer.")
-  } else if (!all(scenario %in% c("historical", "ssp245", "ssp370", "ssp585"))) {
+  } else if (!all(scenario %in% c("historical", "ssp245",
+                                  "ssp370", "ssp585"))) {
     stop("Each scenario must be historical, ssp245, ssp370, or ssp585.")
   } else if (!all(model %in% model_names)) {
     stop("Invalid model name (see get_loca2_model_names()).")
@@ -86,9 +87,11 @@ download_loca2 <- function(model,
       run_names <- run_table$Name
 
       # Throw an error if run doesn't exist
-      run_folder <- run_names[stringr::str_detect(run_names, paste0("^r", given_run, "i"))]
+      run_folder <- run_names[stringr::str_detect(run_names,
+                                                  paste0("^r", given_run, "i"))]
       if (length(run_folder) == 0) {
-        warning(paste0("Run number ", given_run, " for model ", given_model, " does not exist."))
+        warning(paste0("Run number ", given_run, " for model ",
+                       given_model, " does not exist."))
         next
       }
 
@@ -102,14 +105,17 @@ download_loca2 <- function(model,
 
         # Throw an error if scenario doesn't exist
         if (!RCurl::url.exists(period_url)) {
-          warning(paste0("Climate scenario ", period, " for model ", given_model, " for run ", given_run, " does not exist."))
+          warning(paste0("Climate scenario ", period, " for model ",
+                         given_model, " for run ", given_run,
+                         " does not exist."))
           next
         }
 
         # For each variable...
         for (var_name in var) {
           # Create variable directory
-          var_dir <- file.path(model_dir, "0p0625deg", run_folder, period, var_name)
+          var_dir <- file.path(model_dir, "0p0625deg", run_folder,
+                               period, var_name)
           dir.create(var_dir, recursive = TRUE)
 
           # Find desired files

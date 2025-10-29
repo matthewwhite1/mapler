@@ -1,7 +1,7 @@
 #' Download GHCNd files with given ids
 #'
-#' @param ids Station ids
-#' @param out_dir Folder where you want the files to end up
+#' @param ids a character vector of GHCNd station ids
+#' @param out_dir name of the folder where the files will be downloaded to
 #'
 #' @export
 download_ghcnd <- function(ids, out_dir = paste0(getwd())) {
@@ -13,19 +13,18 @@ download_ghcnd <- function(ids, out_dir = paste0(getwd())) {
 }
 
 
-#' Get all station ids for a given country
+#' Get all GHCNd station ids for a given country
 #'
-#' @param file_path The file path where your ghcnd-stations.txt is located
+#' @param file_path file path where ghcnd-stations.txt is located
 #' @param country_code WMO country code
 #'
-#' @return A character vector of station ids
+#' @return character vector of station ids
 #'
 #' @importFrom dplyr filter select pull
 #' @importFrom stringr str_detect
-#' @importFrom rlang .data
 #'
 #' @export
-get_country_ids <- function(file_path, country_code) {
+get_ghcnd_country_ids <- function(file_path, country_code) {
   # Read in ids dataframe, assuming it comes from the ghcnd website
   col_widths <- c(11, 74)
   all_ids <- utils::read.fwf(file_path, widths = col_widths)
@@ -33,9 +32,9 @@ get_country_ids <- function(file_path, country_code) {
 
   # Subset desired ids
   desired_ids <- all_ids |>
-    dplyr::filter(stringr::str_detect(.data$station_id, paste0("^", country_code))) |>
-    dplyr::select(.data$station_id) |>
+    dplyr::filter(stringr::str_detect(station_id, paste0("^", country_code))) |>
+    dplyr::select(station_id) |>
     dplyr::pull()
 
-  return(desired_ids)
+  desired_ids
 }

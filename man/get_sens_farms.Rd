@@ -2,22 +2,23 @@
 % Please edit documentation in R/get_sens_farms.R
 \name{get_sens_farms}
 \alias{get_sens_farms}
-\title{Get the Sen's slope estimate and p-value given an sf dataframe of farm locations}
+\title{Get the Sen's slope estimate and p-value given an sf dataframe of
+farm locations}
 \usage{
 get_sens_farms(farms_coords, sap_prop, elevation = NULL)
 }
 \arguments{
-\item{farms_coords}{An sf dataframe containing farms and their coordinates.}
+\item{farms_coords}{sf dataframe containing farms and their coordinates}
 
-\item{sap_prop}{A terra SpatRaster containing yearly sap day proportion
-rasters, probably calculated from \code{\link[=sap_day]{sap_day()}}.}
+\item{sap_prop}{terra SpatRaster containing yearly sap day proportion
+rasters, probably calculated from \code{\link[=sap_day]{sap_day()}}}
 
-\item{elevation}{A one layer terra SpatRaster containing elevation values.}
+\item{elevation}{one layer terra SpatRaster containing elevation values}
 }
 \value{
-An sf dataframe containing the time series of sap day proportions
+sf dataframe containing the time series of sap day proportions
 for each year, the geometry, the Sen's slope estimate, and the Sen's slope
-p-value.
+p-value
 }
 \description{
 This function takes an sf dataframe of (assumed) farm coordinates. Then, it

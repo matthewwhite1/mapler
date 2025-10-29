@@ -2,30 +2,30 @@
 % Please edit documentation in R/sap_day.R
 \name{sap_day}
 \alias{sap_day}
-\title{Calculate Ideal Sap Days from Temperature Rasters}
+\title{Calculate ideal sap days from temperature rasters}
 \usage{
 sap_day(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1, years = NULL)
 }
 \arguments{
-\item{tmax_rast}{A raster stack of tmax values that must have terra::time
-values containing date information to subset by year.}
+\item{tmax_rast}{terra raster stack of tmax values that must have terra::time
+values containing date information to subset by year}
 
-\item{tmin_rast}{A raster stack of tmin values that must have terra::time
-values containing date information to subset by year.}
+\item{tmin_rast}{terra raster stack of tmin values that must have terra::time
+values containing date information to subset by year}
 
-\item{t_upper}{The upper temperature value for the freeze/thaw cycle that
-will be used in a logical statement to find ideal sap tapping days.}
+\item{t_upper}{upper temperature value for the freeze/thaw cycle that
+will be used in a logical statement to find ideal sap tapping days}
 
-\item{t_lower}{The lower temperature value for the freeze/thaw cycle that
-will be used in a logical statement to find ideal sap tapping days.}
+\item{t_lower}{lower temperature value for the freeze/thaw cycle that
+will be used in a logical statement to find ideal sap tapping days}
 
-\item{years}{An integer vector of years to subset the raster stacks by. All
-of the years must be present in the raster stacks.}
+\item{years}{integer vector of years to subset the raster stacks by. All
+of the years must be present in the raster stacks}
 }
 \value{
-A list of length two - a raster stack of the proportion of ideal
+list of length two - a raster stack of the proportion of ideal
 sap tapping days per year, and a raster stack of the sum of ideal sap
-tapping days per year.
+tapping days per year
 }
 \description{
 Maple sap flows the most on days where temperatures are oscillating between

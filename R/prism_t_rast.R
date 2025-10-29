@@ -1,21 +1,21 @@
 #' Load PRISM tmax and tmin files into rasters
 #'
-#' @param filepath Character file path where files are located.
-#' @param folders Boolean. If TRUE, the filepath contains folders that are
+#' @param filepath character file path where files are located
+#' @param folders boolean. If TRUE, the filepath contains folders that are
 #'   organized by year (1981, 1982, etc.). If FALSE, the filepath must contain
-#'   tmax and tmin .bil files.
+#'   tmax and tmin .bil files
 #'
-#' @return A list of length two - the tmax raster stack and the tmin raster
-#'   stack.
+#' @return list of length two - the tmax raster stack and the tmin raster
+#'   stack
 #'
 #' @export
 prism_t_rast <- function(filepath, folders = TRUE) {
   # Error checking
-  if (!is.character(filepath) | length(filepath) != 1) {
+  if (!is.character(filepath) || length(filepath) != 1) {
     stop("filepath must be a character vector of length 1.")
   } else if (!dir.exists(filepath)) {
     stop("Given directory does not exist.")
-  } else if (!is.logical(folders) | length(folders) != 1) {
+  } else if (!is.logical(folders) || length(folders) != 1) {
     stop("Folders argument must either be TRUE or FALSE.")
   }
 
@@ -23,7 +23,8 @@ prism_t_rast <- function(filepath, folders = TRUE) {
   if (folders) {
     # Check ordering of year folders
     year_folders <- list.files(filepath, full.names = TRUE)
-    years <- as.integer(stringr::str_extract(basename(year_folders), "[[:digit:]]{4}"))
+    years <- as.integer(stringr::str_extract(basename(year_folders),
+                                             "[[:digit:]]{4}"))
 
     # Stop if any folders don't have a year in their name
     if (any(is.na(years))) {
@@ -38,8 +39,10 @@ prism_t_rast <- function(filepath, folders = TRUE) {
   } else {
     # Read in files
     t_files <- list.files(filepath, full.names = TRUE)
-    tmax_all_files <- t_files[stringr::str_detect(basename(t_files), "tmax.*bil$")]
-    tmin_all_files <- t_files[stringr::str_detect(basename(t_files), "tmin.*bil$")]
+    tmax_all_files <- t_files[stringr::str_detect(basename(t_files),
+                                                  "tmax.*bil$")]
+    tmin_all_files <- t_files[stringr::str_detect(basename(t_files),
+                                                  "tmin.*bil$")]
 
     # Stop if no valid files are found
     if (length(tmax_all_files) == 0 || length(tmin_all_files) == 0) {
@@ -47,9 +50,11 @@ prism_t_rast <- function(filepath, folders = TRUE) {
     }
 
     # Extract years from file names
-    tmax_years <- as.integer(stringr::str_extract(basename(tmax_all_files), "[[:digit:]]{4}"))
+    tmax_years <- as.integer(stringr::str_extract(basename(tmax_all_files),
+                                                  "[[:digit:]]{4}"))
     tmax_unique_years <- sort(unique(tmax_years))
-    tmin_years <- as.integer(stringr::str_extract(basename(tmin_all_files), "[[:digit:]]{4}"))
+    tmin_years <- as.integer(stringr::str_extract(basename(tmin_all_files),
+                                                  "[[:digit:]]{4}"))
     tmin_unique_years <- sort(unique(tmin_years))
     years <- intersect(tmax_unique_years, tmin_unique_years)
   }
@@ -64,8 +69,10 @@ prism_t_rast <- function(filepath, folders = TRUE) {
     if (folders) {
       # Read in files
       t_files <- list.files(year_folders[i], full.names = TRUE)
-      tmax_files <- t_files[stringr::str_detect(basename(t_files), "tmax.*bil$")]
-      tmin_files <- t_files[stringr::str_detect(basename(t_files), "tmin.*bil$")]
+      tmax_files <- t_files[stringr::str_detect(basename(t_files),
+                                                "tmax.*bil$")]
+      tmin_files <- t_files[stringr::str_detect(basename(t_files),
+                                                "tmin.*bil$")]
 
       # Skip if no valid files are found for this year
       if (length(tmax_files) == 0 || length(tmin_files) == 0) {
@@ -80,18 +87,21 @@ prism_t_rast <- function(filepath, folders = TRUE) {
 
     # Skip if tmax and tmin have different amount of files
     if (length(tmax_files) != length(tmin_files)) {
-      warning(paste0("Different amount of files between tmax and tmin for year ", years[i]))
+      warning(paste0("Different amount of files between tmax and tmin for
+                     year ", years[i]))
       next
     }
 
     # Check ordering of dates
-    tmax_dates <- stringr::str_extract(basename(tmax_files), "[[:digit:]]{8}") |>
+    tmax_dates <- stringr::str_extract(basename(tmax_files),
+                                       "[[:digit:]]{8}") |>
       lubridate::as_date()
     if (!all(sort(tmax_dates) == tmax_dates)) {
       tmax_files <- tmax_files[order(tmax_dates)]
       tmax_dates <- sort(tmax_dates)
     }
-    tmin_dates <- stringr::str_extract(basename(tmin_files), "[[:digit:]]{8}") |>
+    tmin_dates <- stringr::str_extract(basename(tmin_files),
+                                       "[[:digit:]]{8}") |>
       lubridate::as_date()
     if (!all(sort(tmin_dates) == tmin_dates)) {
       tmin_files <- tmin_files[order(tmin_dates)]
@@ -100,7 +110,8 @@ prism_t_rast <- function(filepath, folders = TRUE) {
 
     # Skip if tmax and tmin don't have exact same dates
     if (!all(tmax_dates == tmin_dates)) {
-      warning(paste0("tmax and tmin don't have exact same dates for year ", years[i]))
+      warning(paste0("tmax and tmin don't have exact same dates for year ",
+                     years[i]))
       next
     }
 

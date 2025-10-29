@@ -1,6 +1,6 @@
-#' Get all 27 LOCA2 model names
+#' Get all LOCA2 model names
 #'
-#' @return A character vector of length 27 with all valid model names.
+#' @return character vector of length 27 with all valid model names
 #'
 #' @export
 get_loca2_model_names <- function() {

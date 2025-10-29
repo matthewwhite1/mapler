@@ -1,17 +1,17 @@
-#' Add a significance column
+#' Add a significance column to a [get_sens_farms()] dataframe
 #'
-#' Add a Sen's slope significance column given an sf dataframe probably outputted
-#' by [get_sens_farms()]. Using the previously calculated Sen's slope already
-#' present in the dataframe, a significance variable is
-#' created that is 1 if the slope is significant-positive, -1 if the slope is
-#' negative-significant, and 0 if the slope is not significant.
+#' Add a Sen's slope significance column given an sf dataframe
+#'   probably outputted by [get_sens_farms()]. Using the previously calculated
+#'   Sen's slope already present in the dataframe, a significance variable is
+#'   created that is 1 if the slope is significant-positive, -1 if the slope is
+#'   negative-significant, and 0 if the slope is not significant.
 #'
-#' @param farms_sf An sf dataframe containing the time series of sap day proportions
-#'   for each year, the geometry, the Sen's slope estimate, and the Sen's slope
-#'   p-value, probably outputted by [get_sens_farms()].
+#' @param farms_sf sf dataframe containing the time series of sap day
+#'   proportions for each year, the geometry, the Sen's slope estimate,
+#'   and the Sen's slope p-value, probably outputted by [get_sens_farms()]
 #'
-#' @return The same sf dataframe passed into the function, but with the added
-#'   significance column.
+#' @return the same sf dataframe passed into the function, but with the added
+#'   significance column
 #'
 #' @export
 get_sens_significance <- function(farms_sf) {

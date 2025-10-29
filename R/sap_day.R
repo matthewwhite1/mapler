@@ -1,4 +1,4 @@
-#' Calculate Ideal Sap Days from Temperature Rasters
+#' Calculate ideal sap days from temperature rasters
 #'
 #' Maple sap flows the most on days where temperatures are oscillating between
 #'   freezing and thawing, known as the freeze/thaw cycle. This function uses
@@ -11,20 +11,20 @@
 #'   default values for the temperature threshold come from (Skinner et al.
 #'   2010).
 #'
-#' @param tmax_rast A raster stack of tmax values that must have terra::time
-#'   values containing date information to subset by year.
-#' @param tmin_rast A raster stack of tmin values that must have terra::time
-#'   values containing date information to subset by year.
-#' @param t_upper The upper temperature value for the freeze/thaw cycle that
-#'   will be used in a logical statement to find ideal sap tapping days.
-#' @param t_lower The lower temperature value for the freeze/thaw cycle that
-#'   will be used in a logical statement to find ideal sap tapping days.
-#' @param years An integer vector of years to subset the raster stacks by. All
-#'   of the years must be present in the raster stacks.
+#' @param tmax_rast terra raster stack of tmax values that must have terra::time
+#'   values containing date information to subset by year
+#' @param tmin_rast terra raster stack of tmin values that must have terra::time
+#'   values containing date information to subset by year
+#' @param t_upper upper temperature value for the freeze/thaw cycle that
+#'   will be used in a logical statement to find ideal sap tapping days
+#' @param t_lower lower temperature value for the freeze/thaw cycle that
+#'   will be used in a logical statement to find ideal sap tapping days
+#' @param years integer vector of years to subset the raster stacks by. All
+#'   of the years must be present in the raster stacks
 #'
-#' @return A list of length two - a raster stack of the proportion of ideal
+#' @return list of length two - a raster stack of the proportion of ideal
 #'   sap tapping days per year, and a raster stack of the sum of ideal sap
-#'   tapping days per year.
+#'   tapping days per year
 #'
 #' @export
 sap_day <- function(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1, years = NULL) {
@@ -73,7 +73,8 @@ sap_day <- function(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1, years =
     sap_sum_list[[i]] <- sap_sum_year
 
     # Print year for progress
-    message(paste0("Successfully calculated proportion and sum of sap days for year ", unique_years[i]))
+    message(paste0("Successfully calculated proportion and sum of sap days for
+                   year ", unique_years[i]))
 
     # Free up memory
     gc()

@@ -40,7 +40,7 @@ download_prism <- function(sp_res = "4km", # or 800m
   # Brennan Bean in 2024
 
   # Testing to ensure variables are in the correct format
-  if ((sp_res != "4km") & (sp_res != "800m")) {
+  if ((sp_res != "4km") && (sp_res != "800m")) {
     stop("spatial resolution argument must be 4km or 800m.")
   }
 

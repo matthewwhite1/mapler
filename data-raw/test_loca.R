@@ -10,7 +10,8 @@ loca_sap_day <- sap_day(loca_rast$tmax, loca_rast$tmin,
 # Shift raster to correct longitude and make pixels bigger
 test_loca <- loca_sap_day$proportion |>
   terra::shift(dx = -360) |>
-  terra::aggregate(10)
+  terra::aggregate(20)
 
 # Write raster to package
-terra::writeRaster(test_loca, "inst/extdata/test_loca_sap_day.tif", overwrite = TRUE)
+terra::writeRaster(test_loca, "inst/extdata/test_loca_sap_day.tif",
+                   overwrite = TRUE)

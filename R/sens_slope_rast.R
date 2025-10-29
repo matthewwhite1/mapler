@@ -1,3 +1,12 @@
+#' Calculate the Sen's slope for every pixel of a raster
+#'
+#' @param t_rast terra raster stack
+#' @param cores integer amount of cores for parallelization
+#'
+#' @return terra raster stack with six layers: Sen's slope estimate,
+#'   z statistic, p-value, sample size, confidence interval lower bound, and
+#'   confidence interval upper bound
+#'
 #' @export
 sens_slope_rast <- function(t_rast, cores = 1) {
   t_rast_slope <- terra::app(t_rast, sens_slope_rast_helper, cores = cores)
@@ -13,11 +22,3 @@ sens_slope_rast_helper <- function(t_pixel) {
   sens_slope <- sens_slope_rcpp(t_pixel_no_na, t)
   unlist(sens_slope)
 }
-
-
-# t_rast <- terra::rast("../loca_sap_weighted.tif")
-# t_rast_small <- terra::aggregate(t_rast, 5)
-# time1 <- Sys.time()
-# test1 <- sens_slope_rast(t_rast, cores = 4)
-# time2 <- Sys.time()
-# time2 - time1

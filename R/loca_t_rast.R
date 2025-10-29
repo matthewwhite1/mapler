@@ -1,19 +1,19 @@
 #' Load LOCA2 tmax and tmin files into rasters
 #'
-#' @param filepath Character file path where files are located. This should
-#'   be the folder in which the climate scenario folders are contained (historical,
-#'   ssp585, etc.). For example, "ACCESS-CM2/0p0625deg/r1i1p1f1" would be
-#'   valid for this argument.
-#' @param scenario A character vector of future climate scenarios. Each value
-#'   in this vector must be either historical, ssp245, ssp370, or ssp585.
+#' @param filepath file path where files are located. This should
+#'   be the folder in which the climate scenario folders are contained
+#'   (historical, ssp585, etc.). For example, "ACCESS-CM2/0p0625deg/r1i1p1f1"
+#'   would be valid for this argument
+#' @param scenario character vector of future climate scenarios. Each value
+#'   in this vector must be either historical, ssp245, ssp370, or ssp585
 #'
-#' @return A list of length two - the tmax raster stack and the tmin raster
-#'   stack.
+#' @return list of length two - the tmax raster stack and the tmin raster
+#'   stack
 #'
 #' @export
 loca_t_rast <- function(filepath, scenario = c("historical", "ssp585")) {
   # Error checking
-  if (!is.character(filepath) | length(filepath) != 1) {
+  if (!is.character(filepath) || length(filepath) != 1) {
     stop("filepath must be a character vector of length 1.")
   } else if (!is.character(scenario)) {
     stop("scenario must be a character vector.")
@@ -53,13 +53,16 @@ loca_t_rast <- function(filepath, scenario = c("historical", "ssp585")) {
 
     # Skip if no valid files are found
     if (length(tmax_files) == 0 || length(tmin_files) == 0) {
-      warning(paste0("No tmax or tmin files found in the given directory ", scenario_folders[i]))
+      warning(paste0("No tmax or tmin files found in the given directory ",
+                     scenario_folders[i]))
       next
     }
 
     # Check for chronological ordering of files
-    tmax_file_year <- as.integer(stringr::str_extract(basename(tmax_files), "[[:digit:]]{4}"))
-    tmin_file_year <- as.integer(stringr::str_extract(basename(tmin_files), "[[:digit:]]{4}"))
+    tmax_file_year <- as.integer(stringr::str_extract(basename(tmax_files),
+                                                      "[[:digit:]]{4}"))
+    tmin_file_year <- as.integer(stringr::str_extract(basename(tmin_files),
+                                                      "[[:digit:]]{4}"))
     if (!all(sort(tmax_file_year) == tmax_file_year)) {
       tmax_files <- tmax_files[order(tmax_file_year)]
       tmax_file_year <- sort(tmax_file_year)
@@ -71,7 +74,9 @@ loca_t_rast <- function(filepath, scenario = c("historical", "ssp585")) {
 
     # Skip if tmax and tmin don't have exact same dates
     if (!all(tmax_file_year == tmin_file_year)) {
-      warning(paste0("tmax and tmin don't have exact same years in given directory ", scenario_folders[i]))
+      warning(paste0("tmax and tmin don't have exact same years in given
+                     directory ",
+                     scenario_folders[i]))
       next
     }
 
@@ -83,7 +88,8 @@ loca_t_rast <- function(filepath, scenario = c("historical", "ssp585")) {
     tmax_list[[i]] <- tmax_run_rast
     tmin_list[[i]] <- tmin_run_rast
 
-    message(paste0("Successfully loaded rasters for scenario ", scenario_folders[i]))
+    message(paste0("Successfully loaded rasters for scenario ",
+                   scenario_folders[i]))
   }
 
   # Stop if no scenarios ended up being valid

@@ -1,3 +1,12 @@
+#' Calculate yearly mean temperatures from temperature rasters
+#'
+#' @param tmax_rast terra raster stack of tmax values that must have terra::time
+#'   values containing date information to subset by year
+#' @param tmin_rast terra raster stack of tmin values that must have terra::time
+#'   values containing date information to subset by year
+#'
+#' @return raster stack of yearly mean temperatures
+#'
 #' @export
 mean_temp_projection <- function(tmax_rast, tmin_rast) {
   # Error checking

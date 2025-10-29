@@ -20,9 +20,13 @@ for (province in provinces) {
   # Get state regions
   province_links <- rvest::html_elements(page, "a") |>
     rvest::html_attr("href")
-  province_links <- province_links[stringr::str_detect(province_links, paste0("^", province, ".*\\.php$"))]
+  province_links <- province_links[stringr::str_detect(province_links,
+                                                       paste0("^",
+                                                              province,
+                                                              ".*\\.php$"))]
   province_links <- province_links[!is.na(province_links)]
-  province_links <- c(province_links, "CNNF.php", "CNPE.php", "CNQC.php", "CNYK.php")
+  province_links <- c(province_links, "CNNF.php", "CNPE.php",
+                      "CNQC.php", "CNYK.php")
 
   # For each region...
   for (region_link in province_links) {
@@ -78,7 +82,8 @@ for (province in provinces) {
 }
 
 # Create data frame with removed duplicates
-canada_farms <- data.frame(farm = farms, address = addresses, state = states, region = regions) |>
+canada_farms <- data.frame(farm = farms, address = addresses,
+                           state = states, region = regions) |>
   dplyr::distinct(farm, .keep_all = TRUE)
 
 usethis::use_data(canada_farms, overwrite = TRUE)

@@ -37,7 +37,7 @@ This package provides three functions for downloading climate data: `download_gh
 both historic climate data and future climate projections.
 
 Once data is downloaded, it can be loaded into R using `loca_t_rast()` or
-`prism_t_rast()`, "t" meaning for temperature. These functions take filepaths
+`prism_t_rast()`, "t" meaning temperature. These functions take filepaths
 of where the data is downloaded and return the tmin and tmax raster stacks.
 
 ## Calculating Sap Days
@@ -48,8 +48,15 @@ during the day.
 
 The function `sap_day()` takes in tmin and tmax raster stacks and aggregates them
 into a yearly sap day stack. This combination of tmin and tmax is used to calculate
-the proportion of sap days in a year at every pixel. The output of this function
-can be used for future climate projection is used with LOCA2 data.
+the proportion of sap days in a year at every pixel. This function
+can be used for future climate projection with LOCA2 data.
+
+## Sen's Slope
+
+This package contains a function called `sens_slope_rast()` that calculates
+the Sen's slope for every pixel in a raster stack. This function is based on
+the Rcpp-optimized `sens_slope()` function, which can be used in contexts
+separate from maple syrup.
 
 ## Maple Farm Coordinates
 
@@ -60,12 +67,14 @@ This package contains a dataset of maple farm coordinates scraped from
 ```{r farm_coords}
 library(mapler)
 
-farms_coords <- read.csv("Data_Clean/farms_coords.csv")
+data(farms_coords)
+
+head(farms_coords)
 ```
 
 ## Future Climate Projection
 
-The `get_sens` family of functions are used together for future climate projection.
+The `get_sens` family of functions can be used for future climate projection.
 Output from `sap_day()` is passed into `get_sens_farms()`, along with farms
 coordinates. This creates a dataframe where every farm time series now has
 a slope and a p-value. This output can be passed into `get_sens_significance()`
@@ -81,7 +90,9 @@ library(tidyverse)
 
 # Read in farm coordinates and sap day projection
 farms_coords <- st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
-sap_prop <- terra::rast("../loca_sap_weighted.tif")
+test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
+                                package = "mapler")
+sap_prop <- terra::rast(test_loca_file)
 
 # Get trend for every farm
 farms_sf <- get_sens_farms(farms_coords, sap_prop)

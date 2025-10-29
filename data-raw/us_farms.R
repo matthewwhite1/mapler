@@ -23,7 +23,10 @@ for (state in us_states) {
   # Get state regions
   state_links <- rvest::html_elements(page, "a") |>
     rvest::html_attr("href")
-  state_links <- state_links[stringr::str_detect(state_links, paste0("^", state, ".*\\.php$"))]
+  state_links <- state_links[stringr::str_detect(state_links,
+                                                 paste0("^",
+                                                        state,
+                                                        ".*\\.php$"))]
   state_links <- state_links[!is.na(state_links)]
 
   # For each region...
@@ -77,6 +80,7 @@ for (state in us_states) {
 }
 
 # Create data frame
-us_farms <- data.frame(farm = farms, address = addresses, state = states, region = regions)
+us_farms <- data.frame(farm = farms, address = addresses,
+                       state = states, region = regions)
 
 usethis::use_data(us_farms, overwrite = TRUE)

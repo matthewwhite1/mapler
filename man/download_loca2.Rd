@@ -2,8 +2,7 @@
 % Please edit documentation in R/download_loca2.R
 \name{download_loca2}
 \alias{download_loca2}
-\title{TODO: Where else could this fail? If the servers are down?
-Download LOCA2 netCDF files}
+\title{Download LOCA2 netCDF files}
 \source{
 \url{https://cirrus.ucsd.edu/~pierce/LOCA2/NAmer/}
 }
@@ -17,23 +16,23 @@ download_loca2(
 )
 }
 \arguments{
-\item{model}{A character vector of models. These must exactly
-match the LOCA2 model names (Ex: "ACCESS-CM2").}
+\item{model}{character vector of models. These must exactly
+match the LOCA2 model names (Ex: "ACCESS-CM2")}
 
-\item{run}{An integer vector of model runs. A run of 1 corresponds to the
-first run of the model (r1i1p1f1), a run of 2 corresponds to the second
-run of the model, and so on.}
+\item{run}{integer vector of model runs. A run of 1 corresponds to the
+first run of the model (Ex: r1i1p1f1), a run of 2 corresponds to the second
+run of the model, and so on}
 
-\item{scenario}{A character vector of future climate scenarios. Each value
-in this vector must be either historical, ssp245, ssp370, or ssp585.}
+\item{scenario}{character vector of future climate scenarios. Each value
+in this vector must be either historical, ssp245, ssp370, or ssp585}
 
-\item{var}{A character vector of variables to download. Each value in this
+\item{var}{character vector of variables to download. Each value in this
 vector must be either pr (precipitation), tasmax (maximum temperature),
 tasmin (minimum temperature), or DTR (difference between maximum and
-minimum temperature).}
+minimum temperature)}
 
-\item{out_dir}{The name of the output directory that will store the
-downloaded files.}
+\item{out_dir}{name of the output directory that will store the
+downloaded files}
 }
 \description{
 This function can be used to download daily netCDF files from LOCA2.
@@ -46,16 +45,18 @@ for just one run of one model can take multiple hours, as these models
 contain some large files.
 }
 \examples{
+\dontrun{
 # Download all files from first LOCA2 model
-# download_loca2(model = "ACCESS-CM2",
-#                run = 1,
-#                scenario = "ssp585",
-#                var = c("pr", "tasmax", "tasmin"))
+download_loca2(model = "ACCESS-CM2",
+               run = 1,
+               scenario = "ssp585",
+               var = c("pr", "tasmax", "tasmin"))
 
 # Download all files with multiple models, runs, and scenarios
-# download_loca2(model = c("ACCESS-CM2", "ACCESS-ESM1-5", "AWI-CM-1-1-MR"),
-#                run = c(1, 2, 3),
-#                scenario = c("ssp245", "ssp370", "ssp585"))
+download_loca2(model = c("ACCESS-CM2", "ACCESS-ESM1-5", "AWI-CM-1-1-MR"),
+               run = c(1, 2, 3),
+               scenario = c("ssp245", "ssp370", "ssp585"))
+}
 }
 \seealso{
 \code{\link[=get_loca2_model_names]{get_loca2_model_names()}}

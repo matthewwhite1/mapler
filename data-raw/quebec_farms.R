@@ -29,7 +29,8 @@ farm_links_5 <- rvest::html_elements(page_5, "a") |>
 farm_links_5 <- farm_links_5[31:35]
 
 # Combine
-farm_links <- c(farm_links_1, farm_links_2, farm_links_3, farm_links_4, farm_links_5) |>
+farm_links <- c(farm_links_1, farm_links_2, farm_links_3,
+                farm_links_4, farm_links_5) |>
   stringr::str_replace("^", "https://www.bonjourquebec.com")
 
 # For each farm...
@@ -53,6 +54,7 @@ for (i in seq_along(farm_links)) {
 addresses <- stringr::str_remove(addresses, ", Canada")
 
 # Create data frame
-quebec_farms <- data.frame(farm = names, address = addresses, state = rep("CNQC", 85), region = rep(NA, 85))
+quebec_farms <- data.frame(farm = names, address = addresses,
+                           state = rep("CNQC", 85), region = rep(NA, 85))
 
 usethis::use_data(quebec_farms, overwrite = TRUE)

@@ -7,15 +7,15 @@
 prism_t_rast(filepath, folders = TRUE)
 }
 \arguments{
-\item{filepath}{Character file path where files are located.}
+\item{filepath}{character file path where files are located}
 
-\item{folders}{Boolean. If TRUE, the filepath contains folders that are
+\item{folders}{boolean. If TRUE, the filepath contains folders that are
 organized by year (1981, 1982, etc.). If FALSE, the filepath must contain
-tmax and tmin .bil files.}
+tmax and tmin .bil files}
 }
 \value{
-A list of length two - the tmax raster stack and the tmin raster
-stack.
+list of length two - the tmax raster stack and the tmin raster
+stack
 }
 \description{
 Load PRISM tmax and tmin files into rasters

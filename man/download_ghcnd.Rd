@@ -7,9 +7,9 @@
 download_ghcnd(ids, out_dir = paste0(getwd()))
 }
 \arguments{
-\item{ids}{Station ids}
+\item{ids}{a character vector of GHCNd station ids}
 
-\item{out_dir}{Folder where you want the files to end up}
+\item{out_dir}{name of the folder where the files will be downloaded to}
 }
 \description{
 Download GHCNd files with given ids
