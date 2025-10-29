@@ -1,8 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// [[Rcpp::export]]
-int mkScore(NumericVector x, int n) {
+int mk_score(NumericVector x, int n) {
   int S = {0};
   for (int j = 0; j < n; ++j) {
     for (int k = 0; k <= j; ++k) {
@@ -46,16 +45,18 @@ NumericVector sens_slope_rcpp(NumericVector x, NumericVector t, double conf_leve
 
   // Find confidence interval bounds
   double C = R::qnorm(1 - (1 - conf_level) / 2, 0, 1, TRUE, FALSE) * sqrt(varS);
-  int rank_up = round((k + C) / 2 + 1);
+  int rank_up = std::round((k + C) / 2 + 1);
+  rank_up = std::max(0, std::min(rank_up, k - 1));
   std::nth_element(d.begin(), d.begin() + rank_up, d.end());
-  int rank_lo = round((k - C) / 2);
+  int rank_lo = std::round((k - C) / 2);
+  rank_lo = std::max(0, std::min(rank_lo, k - 1));
   std::nth_element(d.begin(), d.begin() + rank_lo, d.end());
   double lo = d[rank_lo];
   double up = d[rank_up];
   NumericVector cint = {lo, up};
 
   // Calculate z score
-  int S = mkScore(x, n);
+  int S = mk_score(x, n);
   int sg = (S > 0) - (S < 0);
   double z = sg * (abs(S) - 1) / sqrt(varS);
 

@@ -9,7 +9,9 @@
 #' @export
 sens_slope <- function(x, conf_level = 0.95) {
   if (!is.numeric(x)) {
-    stop("'x' must be a numeric vector")
+    stop("x must be a numeric vector")
+  } else if (length(x) == 1) {
+    stop("x must be longer than 1")
   }
   na.fail(x)
   t <- table(x)

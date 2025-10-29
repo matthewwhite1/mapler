@@ -10,18 +10,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// mkScore
-int mkScore(NumericVector x, int n);
-RcppExport SEXP _mapler_mkScore(SEXP xSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(mkScore(x, n));
-    return rcpp_result_gen;
-END_RCPP
-}
 // sens_slope_rcpp
 NumericVector sens_slope_rcpp(NumericVector x, NumericVector t, double conf_level);
 RcppExport SEXP _mapler_sens_slope_rcpp(SEXP xSEXP, SEXP tSEXP, SEXP conf_levelSEXP) {
@@ -37,7 +25,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mapler_mkScore", (DL_FUNC) &_mapler_mkScore, 2},
     {"_mapler_sens_slope_rcpp", (DL_FUNC) &_mapler_sens_slope_rcpp, 3},
     {NULL, NULL, 0}
 };

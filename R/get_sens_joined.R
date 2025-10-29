@@ -40,7 +40,7 @@ get_sens_joined <- function(farms_sf, shapefile, variable) {
   # Calculate mean proportion by region
   farm_sig_mean <- farms_joined |>
     sf::st_drop_geometry() |>
-    dplyr::group_by(!!rlang::sym(variable)) |>
+    dplyr::group_by({{variable}}) |>
     dplyr::summarize(sig_mean = mean(significant))
   names(farm_sig_mean) <- stringr::str_remove_all(names(farm_sig_mean), "\"")
 
