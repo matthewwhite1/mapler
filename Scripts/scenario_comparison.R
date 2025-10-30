@@ -5,9 +5,9 @@ k_upper <- 2.2 + 273.15
 k_lower <- -1.1 + 273.15
 
 ## Create sap days for all models
-for (i in 1:3) {
+for (i in 1) {
   # Load in rasters
-  path <- paste0("D:/Data/LOCA2/", models[i], "/0p0625deg/r1i1p1f1")
+  path <- paste0("F:/Data/LOCA2/", models[i], "/0p0625deg/r1i1p1f1")
   loca_rast <- loca_t_rast(path)
 
   # Calculate sap days for model
@@ -24,6 +24,48 @@ for (i in 1:3) {
   gc()
   rm(loca_rast)
   rm(model_sap_day)
+}
+
+########## asdjfsa; fdkljsa;dfjk
+path <- "F:/Data/LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1"
+loca_rast <- loca_t_rast(path, scenario = c("historical", "ssp245"))
+mean_annual_temp <- mean_temp_projection(loca_rast$tmax, loca_rast$tmin)
+
+
+# Mean temperature projection
+folders <- list.dirs("F:/Data/LOCA2/", full.names = TRUE, recursive = FALSE)
+folders <- folders[!stringr::str_detect(folders, "mean_temp")]
+model_names <- stringr::str_extract(folders, "/[^/]*$") |>
+  stringr::str_remove("/")
+scenarios <- c("ssp245", "ssp370", "ssp585")
+loca_rast_catcher <- function(run_folder, scenario) {
+  tryCatch(
+    {
+      loca_t_rast(run_folder, scenario = c("historical", scenario))
+    },
+    error = function(e) {
+      print(e)
+      NULL
+    }
+  )
+}
+for (i in seq_along(folders)) {
+  run_folders <- list.dirs(paste0(folders[i], "/0p0625deg"), full.names = TRUE, recursive = FALSE)
+  for (run_folder in run_folders) {
+    run_num <- stringr::str_extract(run_folder, "r\\d") |>
+      stringr::str_remove("r")
+    for (scenario in scenarios) {
+      filename <- paste0("F:/Data/LOCA2/mean_temp_projections/mean_temp_rast_", model_names[i], "_", scenario, "_run", run_num, ".tif")
+      if (file.exists(filename)) {
+        break
+      }
+      loca_rast <- loca_rast_catcher(run_folder, scenario)
+      if (!is.null(loca_rast)) {
+        mean_annual_temp <- mean_temp_projection(loca_rast$tmax, loca_rast$tmin)
+        terra::writeRaster(mean_annual_temp, filename, overwrite = TRUE)
+      }
+    }
+  }
 }
 
 
