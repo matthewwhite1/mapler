@@ -152,7 +152,7 @@ eco_regions_joined <- sens_farms(farms_coords = farms_sf, sap_prop = sap_prop,
 # Prepare map for plotting
 crop_lims <- c(xmin = -99, ymin = 32, xmax = -59, ymax = 53)
 world <- ne_countries(scale = "medium", returnclass = "sf")
-north_america <- world %>%
+north_america <- world |>
   filter(region_un == "Americas", name %in% c("United States of America", "Canada")) |>
   st_crop(crop_lims)
 us_states <- ne_states(country = "United States of America", returnclass = "sf") |>

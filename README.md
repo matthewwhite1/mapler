@@ -104,22 +104,22 @@ library(terra)
 x <- rnorm(1000)
 sens_slope(x)
 #> $estimates
-#>  Sen's slope 
-#> 7.291833e-05 
+#>   Sen's slope 
+#> -2.306566e-05 
 #> 
 #> $statistic
-#>         z 
-#> 0.6892717 
+#>          z 
+#> -0.1967046 
 #> 
 #> $p.value
-#> [1] 0.4906523
+#> [1] 0.8440587
 #> 
 #> $parameter
 #>    n 
 #> 1000 
 #> 
 #> $conf.int
-#> [1] -0.0001363263  0.0002745282
+#> [1] -0.0002548089  0.0002063348
 #> attr(,"conf.level")
 #> [1] 0.95
 
@@ -156,13 +156,13 @@ library(sf)
 library(tidyverse)
 
 # Read in farm coordinates and sap day projection
-farms_sf <- st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
+farms_sf <- sf::st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
 test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
                                 package = "mapler")
 sap_prop <- terra::rast(test_loca_file)
 
 # Read in eco regions shape file
-shapefile <- read_sf("Data_Clean/NA_Eco_Level3/NA_CEC_Eco_Level3.shp")
+shapefile <- sf::read_sf("Data_Clean/NA_Eco_Level3/NA_CEC_Eco_Level3.shp")
 variable <- names(shapefile)[2]
 
 # Get proportion of Sen's significance at each eco region
@@ -172,7 +172,7 @@ eco_regions_joined <- sens_farms(farms_coords = farms_sf, sap_prop = sap_prop,
 # Prepare map for plotting
 crop_lims <- c(xmin = -99, ymin = 32, xmax = -59, ymax = 53)
 world <- ne_countries(scale = "medium", returnclass = "sf")
-north_america <- world %>%
+north_america <- world |>
   filter(region_un == "Americas", name %in% c("United States of America", "Canada")) |>
   st_crop(crop_lims)
 us_states <- ne_states(country = "United States of America", returnclass = "sf") |>
