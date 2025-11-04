@@ -29,6 +29,22 @@
 #'   and the corresponding shapefile boundaries - this can be plotted with
 #'   something like ggplot
 #'
+#' @examples
+#' \dontrun{
+#' # Read in farm coordinates and sap day projection
+#' farms_sf <- sf::st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
+#' test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
+#'                               package = "mapler")
+#' sap_prop <- terra::rast(test_loca_file)
+#'
+#' # Read in eco regions shape file
+#' shapefile <- sf::read_sf("Data_Clean/NA_Eco_Level3/NA_CEC_Eco_Level3.shp")
+#' variable <- names(shapefile)[2]
+#'
+#' # Get proportion of Sen's significance at each eco region
+#' eco_regions_joined <- sens_farms(farms_coords = farms_sf, sap_prop = sap_prop,
+#'                                  shapefile = shapefile, group_var = variable)
+#' }
 #' @export
 sens_farms <- function(farms_coords, sap_prop, elevation = NULL, shapefile, group_var, sig_var = "sens") {
   # Error checking

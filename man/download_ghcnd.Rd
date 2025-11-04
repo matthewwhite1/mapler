@@ -7,10 +7,17 @@
 download_ghcnd(ids, out_dir = paste0(getwd()))
 }
 \arguments{
-\item{ids}{a character vector of GHCNd station ids}
+\item{ids}{character vector of GHCNd station ids}
 
-\item{out_dir}{name of the folder where the files will be downloaded to}
+\item{out_dir}{name of the directory where the files will be downloaded to}
 }
 \description{
 Download GHCNd files with given ids
+}
+\examples{
+\dontrun{
+# Download files for all U.S. stations
+my_ids <- get_ghcnd_country_ids("US")
+download_ghcnd(my_ids)
+}
 }

@@ -51,6 +51,23 @@ into a yearly sap day stack. This combination of tmin and tmax is used to calcul
 the proportion of sap days in a year at every pixel. This function
 can be used for future climate projection with LOCA2 data.
 
+The `sap_day()` function can be used with LOCA2 data like so:
+
+```{r sap_day, eval = FALSE}
+# Load in rasters
+loca_rast <- loca_t_rast("D:/Data/LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1/")
+
+# Calculate yearly sap days (LOCA2 temps are in Kelvin)
+k_upper <- 2.2 + 273.15
+k_lower <- -1.1 + 273.15
+loca_sap_day <- sap_day(loca_rast$tmax, loca_rast$tmin,
+                        t_upper = k_upper, t_lower = k_lower)
+
+# Shift raster to correct longitude to match WGS84
+test_loca <- loca_sap_day$proportion |>
+  terra::shift(dx = -360)
+```
+
 ## Package Data
 
 This package contains a few datasets from various sources. The `farms` datasets
@@ -119,13 +136,13 @@ library(sf)
 library(tidyverse)
 
 # Read in farm coordinates and sap day projection
-farms_sf <- st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
+farms_sf <- sf::st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
 test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
                                 package = "mapler")
 sap_prop <- terra::rast(test_loca_file)
 
 # Read in eco regions shape file
-shapefile <- read_sf("Data_Clean/NA_Eco_Level3/NA_CEC_Eco_Level3.shp")
+shapefile <- sf::read_sf("Data_Clean/NA_Eco_Level3/NA_CEC_Eco_Level3.shp")
 variable <- names(shapefile)[2]
 
 # Get proportion of Sen's significance at each eco region

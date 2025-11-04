@@ -1,4 +1,5 @@
 ## usethis namespace: start
+#' @importFrom bench mark
 #' @importFrom Rcpp evalCpp
 #' @importFrom rlang .data
 #' @importFrom trend sens.slope

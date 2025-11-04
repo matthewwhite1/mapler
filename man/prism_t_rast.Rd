@@ -4,7 +4,7 @@
 \alias{prism_t_rast}
 \title{Load PRISM tmax and tmin files into rasters}
 \usage{
-prism_t_rast(filepath, folders = TRUE)
+prism_t_rast(filepath, folders = FALSE)
 }
 \arguments{
 \item{filepath}{character file path where files are located}
@@ -19,4 +19,9 @@ stack
 }
 \description{
 Load PRISM tmax and tmin files into rasters
+}
+\examples{
+\dontrun{
+prism_t_rast("D:/Data/PRISM", folders = TRUE)
+}
 }

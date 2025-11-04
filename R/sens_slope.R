@@ -6,6 +6,9 @@
 #' @return list of five items: Sen's slope estimate,
 #'   z statistic, p-value, sample size, and confidence interval
 #'
+#' @examples
+#' x <- rnorm(1000)
+#' sens_slope(x)
 #' @export
 sens_slope <- function(x, conf_level = 0.95) {
   if (!is.numeric(x)) {

@@ -26,6 +26,17 @@
 #'   sap tapping days per year, and a raster stack of the sum of ideal sap
 #'   tapping days per year
 #'
+#' @examples
+#' \dontrun{
+#' # Load in rasters
+#' loca_rast <- loca_t_rast("D:/Data/LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1/")
+#'
+#' # Calculate yearly sap days
+#' k_upper <- 2.2 + 273.15
+#' k_lower <- -1.1 + 273.15
+#' loca_sap_day <- sap_day(loca_rast$tmax, loca_rast$tmin,
+#'                         t_upper = k_upper, t_lower = k_lower)
+#' }
 #' @export
 sap_day <- function(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1, years = NULL) {
   # Error checking
@@ -37,6 +48,8 @@ sap_day <- function(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1, years =
     stop("t_upper must be numeric.")
   } else if (!is.numeric(t_lower)) {
     stop("t_lower must be numeric.")
+  } else if (!is.numeric(years) || !is.vector(years)) {
+    stop("years must be numeric vector.")
   }
 
   # Extract years for subsetting

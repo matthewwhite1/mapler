@@ -22,3 +22,9 @@ stack
 \description{
 Load LOCA2 tmax and tmin files into rasters
 }
+\examples{
+\dontrun{
+loca_t_rast("D:/Data/LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1",
+            c("historical", "ssp245"))
+}
+}

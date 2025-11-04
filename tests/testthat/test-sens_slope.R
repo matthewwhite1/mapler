@@ -33,3 +33,10 @@ test_that("trend::sens.slope() matches mapler::sens_slope() for raster", {
     expect_equal(mapler_vals, trend_vals, tolerance = 1E-3)
   }
 })
+
+test_that("sens_slope() is faster than trend::sens.slope()", {
+  x <- rnorm(1000)
+  my_test <- bench::mark(sens_slope(x), trend::sens.slope(x), check = FALSE)
+  expect_true(my_test$median[1] < my_test$median[2])
+  expect_true(my_test$mem_alloc[1] < my_test$mem_alloc[2])
+})

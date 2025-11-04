@@ -8,8 +8,12 @@
 #' @return list of length two - the tmax raster stack and the tmin raster
 #'   stack
 #'
+#' @examples
+#' \dontrun{
+#' prism_t_rast("D:/Data/PRISM", folders = TRUE)
+#' }
 #' @export
-prism_t_rast <- function(filepath, folders = TRUE) {
+prism_t_rast <- function(filepath, folders = FALSE) {
   # Error checking
   if (!is.character(filepath) || length(filepath) != 1) {
     stop("filepath must be a character vector of length 1.")
@@ -22,7 +26,7 @@ prism_t_rast <- function(filepath, folders = TRUE) {
   # Define years vector based on whether there are year folders
   if (folders) {
     # Check ordering of year folders
-    year_folders <- list.files(filepath, full.names = TRUE)
+    year_folders <- list.dirs(filepath, full.names = TRUE)
     years <- as.integer(stringr::str_extract(basename(year_folders),
                                              "[[:digit:]]{4}"))
 

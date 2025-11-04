@@ -18,3 +18,7 @@ z statistic, p-value, sample size, and confidence interval
 \description{
 Calculate the Sen's slope for a numeric vector
 }
+\examples{
+x <- rnorm(1000)
+sens_slope(x)
+}

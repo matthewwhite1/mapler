@@ -22,7 +22,8 @@ Imports:
     tidyr,
     Kendall,
     trend,
-    rlang
+    rlang,
+    bench
 LinkingTo: 
     Rcpp
 Suggests: 

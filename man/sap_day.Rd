@@ -39,3 +39,15 @@ occurred on 80\% of the days when the minimum temperature fell below
 default values for the temperature threshold come from (Skinner et al.
 2010).
 }
+\examples{
+\dontrun{
+# Load in rasters
+loca_rast <- loca_t_rast("D:/Data/LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1/")
+
+# Calculate yearly sap days
+k_upper <- 2.2 + 273.15
+k_lower <- -1.1 + 273.15
+loca_sap_day <- sap_day(loca_rast$tmax, loca_rast$tmin,
+                        t_upper = k_upper, t_lower = k_lower)
+}
+}

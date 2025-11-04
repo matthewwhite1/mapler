@@ -54,6 +54,8 @@ download_loca2 <- function(model,
     stop("Each scenario must be historical, ssp245, ssp370, or ssp585.")
   } else if (!all(model %in% mapler::loca2_model_names)) {
     stop("Invalid model name (see loca2_model_names).")
+  } else if (!is.character(out_dir) || length(out_dir) != 1) {
+    stop("out_dir must be a character vector of length 1")
   } else if (!dir.exists(out_dir)) {
     stop("Out directory does not exist.")
   } else if (!all(var %in% c("pr", "tasmax", "tasmin", "DTR"))) {

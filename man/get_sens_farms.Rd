@@ -26,3 +26,13 @@ extracts the time series of yearly sap day proportions for each farm. Sen's
 slope is calculated for each time series. The slope estimate and p-value are
 added as columns to the extracted data frame.
 }
+\examples{
+# Read in farm coordinates and sap day projection
+farms_sf <- sf::st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
+test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
+                              package = "mapler")
+sap_prop <- terra::rast(test_loca_file)
+
+# Get Sen's slope for every farm
+get_sens_farms(farms_sf, sap_prop)
+}

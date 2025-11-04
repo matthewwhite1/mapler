@@ -1,0 +1,37 @@
+test_that("download_loca2() fails gracefully", {
+  expect_error(download_loca2(model = 5,
+                              run = c(1, 2, 3),
+                              scenario = c("ssp245", "ssp370", "ssp585")))
+  expect_error(download_loca2(model = "hehe",
+                              run = c(1, 2, 3),
+                              scenario = c("ssp245", "ssp370", "ssp585")))
+  expect_error(download_loca2(model = "ACCESS-CM2",
+                              run = "hehe",
+                              scenario = c("ssp245", "ssp370", "ssp585")))
+  expect_error(download_loca2(model = "ACCESS-CM2",
+                              run = c(1, 2, 3),
+                              scenario = c("ssp245", "hehe")))
+  expect_error(download_loca2(model = "ACCESS-CM2",
+                              run = c(1, 2, 3),
+                              scenario = 1))
+  expect_error(download_loca2(model = "ACCESS-CM2",
+                              run = c(1, 2, 3),
+                              scenario = c("ssp245"),
+                              var = 2))
+  expect_error(download_loca2(model = "ACCESS-CM2",
+                              run = c(1, 2, 3),
+                              scenario = c("ssp245"),
+                              var = "hehe"))
+  expect_error(download_loca2(model = "ACCESS-CM2",
+                              run = c(1, 2, 3),
+                              scenario = c("ssp245"),
+                              out_dir = 1))
+  expect_error(download_loca2(model = "ACCESS-CM2",
+                              run = c(1, 2, 3),
+                              scenario = c("ssp245"),
+                              out_dir = c("hehe")))
+  expect_error(download_loca2(model = "ACCESS-CM2",
+                              run = c(1, 2, 3),
+                              scenario = c("ssp245"),
+                              out_dir = c("hehe", "haha")))
+})

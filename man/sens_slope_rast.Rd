@@ -19,3 +19,9 @@ confidence interval upper bound
 \description{
 Calculate the Sen's slope for every pixel of a raster
 }
+\examples{
+test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
+                              package = "mapler")
+sap_prop <- terra::rast(test_loca_file)
+sens_slope_rast(sap_prop)
+}

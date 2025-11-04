@@ -15,6 +15,15 @@
 #'   for each year, the geometry, the Sen's slope estimate, and the Sen's slope
 #'   p-value
 #'
+#' @examples
+#' # Read in farm coordinates and sap day projection
+#' farms_sf <- sf::st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
+#' test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
+#'                               package = "mapler")
+#' sap_prop <- terra::rast(test_loca_file)
+#'
+#' # Get Sen's slope for every farm
+#' get_sens_farms(farms_sf, sap_prop)
 #' @export
 get_sens_farms <- function(farms_coords, sap_prop, elevation = NULL) {
   # Error checking

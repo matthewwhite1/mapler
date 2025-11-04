@@ -7,11 +7,15 @@
 get_ghcnd_country_ids(country_code)
 }
 \arguments{
-\item{country_code}{WMO country code}
+\item{country_code}{character vector of WMO country codes}
 }
 \value{
 character vector of station ids
 }
 \description{
 Get all GHCNd station ids for a given country
+}
+\examples{
+# Get all U.S. country ids
+get_ghcnd_country_ids("US")
 }

@@ -7,6 +7,11 @@
 #'   z statistic, p-value, sample size, confidence interval lower bound, and
 #'   confidence interval upper bound
 #'
+#' @examples
+#' test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
+#'                               package = "mapler")
+#' sap_prop <- terra::rast(test_loca_file)
+#' sens_slope_rast(sap_prop)
 #' @export
 sens_slope_rast <- function(t_rast, cores = 1) {
   t_rast_slope <- terra::app(t_rast, sens_slope_rast_helper, cores = cores)

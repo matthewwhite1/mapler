@@ -10,6 +10,11 @@
 #' @return list of length two - the tmax raster stack and the tmin raster
 #'   stack
 #'
+#' @examples
+#' \dontrun{
+#' loca_t_rast("D:/Data/LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1",
+#'             c("historical", "ssp245"))
+#' }
 #' @export
 loca_t_rast <- function(filepath, scenario = c("historical", "ssp585")) {
   # Error checking
@@ -24,10 +29,11 @@ loca_t_rast <- function(filepath, scenario = c("historical", "ssp585")) {
   # Get scenario file paths
   scenario_folders <- c()
   for (period in scenario) {
-    scenario_folders <- c(scenario_folders, file.path(filepath, period))
     if (!dir.exists(file.path(filepath, period))) {
-      stop(paste0("Given scenario folder does not exist for scenario ", period))
+      warning(paste0("Given scenario folder does not exist for scenario ", period))
+      next
     }
+    scenario_folders <- c(scenario_folders, file.path(filepath, period))
   }
 
   # Initialize empty lists
@@ -42,9 +48,11 @@ loca_t_rast <- function(filepath, scenario = c("historical", "ssp585")) {
 
     # Make sure file paths exist
     if (!dir.exists(tmax_folder)) {
-      stop(paste0("tasmax folder does not exist within scenario ", period))
+      warning(paste0("tasmax folder does not exist within scenario ", period))
+      next
     } else if (!dir.exists(tmin_folder)) {
-      stop(paste0("tasmin folder does not exist within scenario ", period))
+      warning(paste0("tasmin folder does not exist within scenario ", period))
+      next
     }
 
     # List netCDF files
