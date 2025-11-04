@@ -5,18 +5,21 @@
 \title{Get an sf data frame of maple farms' Sen's slope grouped by shapefile
 variable}
 \usage{
-get_sens_joined(farms_sf, shapefile, variable)
+get_sens_joined(farms_sf, shapefile, group_var, sig_var = "sens_significant")
 }
 \arguments{
 \item{farms_sf}{sf dataframe containing the time series of sap day
 proportions for each year, the geometry, the Sen's slope estimate,
 the Sen's slope p-value, and the significance value,
-probably outputted by \code{\link[=get_sens_significance]{get_sens_significance()}}}
+probably outputted by \code{\link[=get_sens_farms]{get_sens_farms()}}}
 
 \item{shapefile}{sf dataframe containing geographical shape boundaries}
 
-\item{variable}{character vector of length 1 containing the name of the
+\item{group_var}{character vector of length 1 containing the name of the
 variable within the shapefile dataframe to group by}
+
+\item{sig_var}{character vector of length 1 containing the name of the
+significance column in farms_sf that will be averaged per shapefile region}
 }
 \value{
 sf dataframe that contains the significance averages for each group
@@ -24,8 +27,7 @@ and the corresponding shapefile boundaries - this can be plotted with
 something like ggplot
 }
 \description{
-This function takes an sf dataframe probably outputted by \code{\link[=get_sens_farms]{get_sens_farms()}}
-or \code{\link[=get_sens_significance]{get_sens_significance()}}.
+This function takes an sf dataframe probably outputted by \code{\link[=get_sens_farms]{get_sens_farms()}}.
 The farms are grouped by variable in the shapefile, and the average of the
 significance value is taken for each group. A dataframe is returned that
 contains the significance averages for each group and the corresponding

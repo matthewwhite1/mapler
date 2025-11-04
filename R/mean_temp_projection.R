@@ -10,7 +10,7 @@
 #' @export
 mean_temp_projection <- function(tmax_rast, tmin_rast) {
   # Error checking
-  if (class(tmax_rast) != "SpatRaster" || class(tmin_rast) != "SpatRaster") {
+  if (!inherits(tmax_rast, "SpatRaster") || !inherits(tmin_rast, "SpatRaster")) {
     stop("tmax_rast and tmin_rast must be terra rasters.")
   } else if (!all(terra::time(tmax_rast) == terra::time(tmin_rast))) {
     stop("tmax_rast and tmin_rast must have identical terra::time values.")

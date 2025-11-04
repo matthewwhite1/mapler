@@ -51,59 +51,86 @@ into a yearly sap day stack. This combination of tmin and tmax is used to calcul
 the proportion of sap days in a year at every pixel. This function
 can be used for future climate projection with LOCA2 data.
 
+## Package Data
+
+This package contains a few datasets from various sources. The `farms` datasets
+(`us_farms`, `canada_farms`, `quebec_farms`) contain maple farm names and
+addresses scraped from the internet. The `farms_coords` dataset contains
+geocoded latitude and longitude coordinates of these farms.
+
+This package also contains two datasets to assist in downloading climate data:
+`loca2_model_names` and `ghcnd_stations`.
+
+For an example of what `sap_day()` can do, this package contains an example 
+raster called `test_loca_sap_day`. This was created by downloading historical
+and scenario ssp585 tmin and tmax data from the LOCA2 model ACCESS-CM2,
+loading the rasters into R using `loca_t_rast()`, calculating yearly sap
+day proportions using `sap_day()`, shifting the longitude by -360 to
+match WGS84, and aggregating by a factor of 20 to decrease the file size. It
+can be accessed like so:
+
+```{r test_loca}
+test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
+                                package = "mapler")
+sap_prop <- terra::rast(test_loca_file)
+```
+
 ## Sen's Slope
 
 This package contains a function called `sens_slope_rast()` that calculates
 the Sen's slope for every pixel in a raster stack. This function is based on
 the Rcpp-optimized `sens_slope()` function, which can be used in contexts
-separate from maple syrup.
+separate from maple syrup. These functions can be used like so:
 
-## Maple Farm Coordinates
-
-This package contains a dataset of maple farm coordinates scraped from
-[maplesyrupfarms.org](https://www.maplesyrupfarms.org/) and geocoded with
-`tidygeocoder`. The data can be accessed like so:
-
-```{r farm_coords}
+```{r sens_slope}
 library(mapler)
+library(terra)
 
-data(farms_coords)
+# Get Sen's slope of vector of random values
+x <- rnorm(1000)
+sens_slope(x)
 
-head(farms_coords)
+# Get and plot Sen's slope of entire raster
+test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
+                                package = "mapler")
+sap_prop <- terra::rast(test_loca_file)
+sens_rast <- sens_slope_rast(sap_prop)
+plot(sens_rast[[1]])
 ```
 
 ## Future Climate Projection
 
-The `get_sens` family of functions can be used for future climate projection.
-Output from `sap_day()` is passed into `get_sens_farms()`, along with farms
-coordinates. This creates a dataframe where every farm time series now has
-a slope and a p-value. This output can be passed into `get_sens_significance()`
-and `get_sens_joined()` for plotting.
+The `sens` family of functions can be used for future climate projection.
+Output from `sap_day()` can be passed into `sens_farms()`, along with farms
+coordinates. This function combines the `get_sens_farms()` and
+`get_sens_joined()` functions. `sens_farms()` starts by calculating the 
+Sen's slope for each farm and creating a new variable that is 1 if the slope is
+significant positive, -1 if the slope is significant negative, and 0 otherwise.
+Then, the farms are joined to a shapefile, and a proportion of the significant
+variable is calculated for each group in the shapefile. This resulting dataframe
+can be plotted with something like ggplot.
 
 The following code can be used as a guide for plotting a future sap day projection.
 
-```{r eco_region, message = FALSE, warning = FALSE}
+```{r eco_region, message = FALSE, warning = FALSE, fig.dim = c(10, 8)}
 library(rnaturalearth)
 library(rnaturalearthdata)
 library(sf)
 library(tidyverse)
 
 # Read in farm coordinates and sap day projection
-farms_coords <- st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
+farms_sf <- st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
 test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
                                 package = "mapler")
 sap_prop <- terra::rast(test_loca_file)
-
-# Get trend for every farm
-farms_sf <- get_sens_farms(farms_coords, sap_prop)
-farms_sf <- get_sens_significance(farms_sf)
 
 # Read in eco regions shape file
 shapefile <- read_sf("Data_Clean/NA_Eco_Level3/NA_CEC_Eco_Level3.shp")
 variable <- names(shapefile)[2]
 
-# Get proportion of significance at each eco region
-eco_regions_joined <- get_sens_joined(farms_sf, shapefile, variable)
+# Get proportion of Sen's significance at each eco region
+eco_regions_joined <- sens_farms(farms_coords = farms_sf, sap_prop = sap_prop,
+                                 shapefile = shapefile, group_var = variable)
 
 # Prepare map for plotting
 crop_lims <- c(xmin = -99, ymin = 32, xmax = -59, ymax = 53)
@@ -137,13 +164,14 @@ ggplot() +
 
 The same thing can be done for U.S. counties:
 
-```{r us_counties, message = FALSE, warning = FALSE}
+```{r us_counties, message = FALSE, warning = FALSE, fig.dim = c(10, 8)}
 library(tigris)
 
 shapefile <- counties(cb = TRUE, year = 2020)
 variable <- "GEOID"
 
-us_counties_joined <- get_sens_joined(farms_sf, shapefile, variable)
+us_counties_joined <- sens_farms(farms_coords = farms_sf, sap_prop = sap_prop,
+                                 shapefile = shapefile, group_var = variable)
 
 # Plot
 ggplot() +

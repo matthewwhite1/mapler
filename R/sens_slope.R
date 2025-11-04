@@ -13,7 +13,7 @@ sens_slope <- function(x, conf_level = 0.95) {
   } else if (length(x) == 1) {
     stop("x must be longer than 1")
   }
-  na.fail(x)
+  stats::na.fail(x)
   t <- table(x)
   output <- sens_slope_rcpp(x, t, conf_level)
   named_output <- list(

@@ -4,11 +4,9 @@
 \alias{get_ghcnd_country_ids}
 \title{Get all GHCNd station ids for a given country}
 \usage{
-get_ghcnd_country_ids(file_path, country_code)
+get_ghcnd_country_ids(country_code)
 }
 \arguments{
-\item{file_path}{file path where ghcnd-stations.txt is located}
-
 \item{country_code}{WMO country code}
 }
 \value{

@@ -12,19 +12,17 @@ RoxygenNote: 7.3.2
 Imports: 
     dplyr,
     stringr,
-    rlang,
     Rcpp,
     XML,
     httr,
     terra,
     lubridate,
     RCurl,
-    ggplot2,
-    rnaturalearth,
     sf,
-    trend,
     tidyr,
-    Kendall
+    Kendall,
+    trend,
+    rlang
 LinkingTo: 
     Rcpp
 Suggests: 

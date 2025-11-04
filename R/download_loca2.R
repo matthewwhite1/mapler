@@ -22,7 +22,7 @@
 #'   for just one run of one model can take multiple hours, as these models
 #'   contain some large files.
 #'
-#' @seealso [get_loca2_model_names()]
+#' @seealso [loca2_model_names]
 #'
 #' @source \url{https://cirrus.ucsd.edu/~pierce/LOCA2/NAmer/}
 #'
@@ -45,8 +45,6 @@ download_loca2 <- function(model,
                            scenario = c("historical", "ssp585"),
                            var = c("pr", "tasmax", "tasmin"),
                            out_dir = paste0(getwd())) {
-  # Get all model names for error checking
-  model_names <- get_loca2_model_names()
 
   # Argument error checking
   if (!is.numeric(run) || !all(run %% 1 == 0)) {
@@ -54,8 +52,8 @@ download_loca2 <- function(model,
   } else if (!all(scenario %in% c("historical", "ssp245",
                                   "ssp370", "ssp585"))) {
     stop("Each scenario must be historical, ssp245, ssp370, or ssp585.")
-  } else if (!all(model %in% model_names)) {
-    stop("Invalid model name (see get_loca2_model_names()).")
+  } else if (!all(model %in% mapler::loca2_model_names)) {
+    stop("Invalid model name (see loca2_model_names).")
   } else if (!dir.exists(out_dir)) {
     stop("Out directory does not exist.")
   } else if (!all(var %in% c("pr", "tasmax", "tasmin", "DTR"))) {
@@ -83,7 +81,7 @@ download_loca2 <- function(model,
       run_nodes <- XML::getNodeSet(run_pagehtml, "//table")
       run_table <- XML::readHTMLTable(run_nodes[[1]])
       run_table <- run_table[, -1] |>
-        dplyr::filter(!is.na(Name) & Name != "Parent Directory")
+        dplyr::filter(!is.na(.data$Name) & .data$Name != "Parent Directory")
       run_names <- run_table$Name
 
       # Throw an error if run doesn't exist
@@ -125,10 +123,10 @@ download_loca2 <- function(model,
           data_nodes <- XML::getNodeSet(data_pagehtml, "//table")
           data_table <- XML::readHTMLTable(data_nodes[[1]])
           data_table <- data_table[, -1] |>
-            dplyr::filter(!is.na(Name) & Name != "Parent Directory" &
-                            !stringr::str_detect(Name, "monthly") &
-                            !stringr::str_detect(Name, "yearly") &
-                            stringr::str_detect(Size, "G"))
+            dplyr::filter(!is.na(.data$Name) & .data$Name != "Parent Directory" &
+                            !stringr::str_detect(.data$Name, "monthly") &
+                            !stringr::str_detect(.data$Name, "yearly") &
+                            stringr::str_detect(.data$Size, "G"))
 
           # Download desired files
           for (file_name in data_table$Name) {

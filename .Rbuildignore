@@ -6,3 +6,5 @@
 ^Scripts
 ^LICENSE\.md$
 ^data-raw$
+^Data\_Clean
+^Rmd

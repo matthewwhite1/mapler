@@ -59,5 +59,5 @@ download_loca2(model = c("ACCESS-CM2", "ACCESS-ESM1-5", "AWI-CM-1-1-MR"),
 }
 }
 \seealso{
-\code{\link[=get_loca2_model_names]{get_loca2_model_names()}}
+\link{loca2_model_names}
 }

@@ -1,8 +1,7 @@
 #' Get an sf data frame of maple farms' Sen's slope grouped by shapefile
 #'   variable
 #'
-#' This function takes an sf dataframe probably outputted by [get_sens_farms()]
-#' or [get_sens_significance()].
+#' This function takes an sf dataframe probably outputted by [get_sens_farms()].
 #' The farms are grouped by variable in the shapefile, and the average of the
 #' significance value is taken for each group. A dataframe is returned that
 #' contains the significance averages for each group and the corresponding
@@ -11,26 +10,32 @@
 #' @param farms_sf sf dataframe containing the time series of sap day
 #'   proportions for each year, the geometry, the Sen's slope estimate,
 #'   the Sen's slope p-value, and the significance value,
-#'   probably outputted by [get_sens_significance()]
+#'   probably outputted by [get_sens_farms()]
 #' @param shapefile sf dataframe containing geographical shape boundaries
-#' @param variable character vector of length 1 containing the name of the
+#' @param group_var character vector of length 1 containing the name of the
 #'   variable within the shapefile dataframe to group by
+#' @param sig_var character vector of length 1 containing the name of the
+#'   significance column in farms_sf that will be averaged per shapefile region
 #'
 #' @return sf dataframe that contains the significance averages for each group
 #'   and the corresponding shapefile boundaries - this can be plotted with
 #'   something like ggplot
 #'
 #' @export
-get_sens_joined <- function(farms_sf, shapefile, variable) {
+get_sens_joined <- function(farms_sf, shapefile, group_var, sig_var = "sens_significant") {
   # Error checking
   sf_helper(farms_sf)
   if (!any(class(shapefile) == "sf") ||
       !any(class(shapefile) == "data.frame")) {
     stop("shapefile must have both class sf and data.frame.")
-  } else if (!is.character(variable) || length(variable) != 1) {
-    stop("variable must be a character vector of length 1.")
-  } else if (!any(names(shapefile) == variable)) {
-    stop("variable must be the name of a column in the shapefile.")
+  } else if (!is.character(group_var) || length(group_var) != 1) {
+    stop("group_var must be a character vector of length 1.")
+  } else if (!any(names(shapefile) == group_var)) {
+    stop("group_var must be the name of a column in the shapefile.")
+  } else if (!is.character(sig_var) || length(sig_var) != 1) {
+    stop("sig_var must be a character vector of length 1.")
+  } else if (!any(names(farms_sf) == sig_var)) {
+    stop("sig_var must be the name of a column in farms_sf.")
   }
 
   # Join sf objects
@@ -40,12 +45,12 @@ get_sens_joined <- function(farms_sf, shapefile, variable) {
   # Calculate mean proportion by region
   farm_sig_mean <- farms_joined |>
     sf::st_drop_geometry() |>
-    dplyr::group_by({{variable}}) |>
-    dplyr::summarize(sig_mean = mean(significant))
+    dplyr::group_by(.data[[group_var]]) |>
+    dplyr::summarize(sig_mean = mean(.data[[sig_var]]))
   names(farm_sig_mean) <- stringr::str_remove_all(names(farm_sig_mean), "\"")
 
   # Rejoin back into shapefile table
-  shapefile_joined <- dplyr::right_join(shapefile, farm_sig_mean, by = variable)
+  shapefile_joined <- dplyr::right_join(shapefile, farm_sig_mean, by = group_var)
 
   # Return thing to be plotted
   shapefile_joined

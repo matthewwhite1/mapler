@@ -19,7 +19,7 @@
 get_sens_farms <- function(farms_coords, sap_prop, elevation = NULL) {
   # Error checking
   sf_helper(farms_coords)
-  if (class(sap_prop) != "SpatRaster") {
+  if (!inherits(sap_prop, "SpatRaster")) {
     stop("sap_prop must have class SpatRaster.")
   }
 
@@ -28,7 +28,7 @@ get_sens_farms <- function(farms_coords, sap_prop, elevation = NULL) {
 
   # Add on elevation if provided
   if (!is.null(elevation)) {
-    if (class(elevation) != "SpatRaster") {
+    if (!inherits(elevation, "SpatRaster")) {
       stop("elevation must have class SpatRaster.")
     } else if (dim(elevation)[3] != 1) {
       stop("elevation must be a 1 layer raster.")
@@ -40,7 +40,7 @@ get_sens_farms <- function(farms_coords, sap_prop, elevation = NULL) {
   # Create sf version of farms_props
   farms_sf <- sf::st_sf(farms_props, geometry = farms_coords$geometry) |>
     tidyr::drop_na() |>
-    dplyr::select(-ID)
+    dplyr::select(-"ID")
 
   # Initialize empty vectors
   farms_sf$sens_estimate <- rep(0, nrow(farms_sf))
@@ -55,6 +55,26 @@ get_sens_farms <- function(farms_coords, sap_prop, elevation = NULL) {
     mk <- Kendall::MannKendall(as.numeric(sf::st_drop_geometry(farms_sf[i, names(sap_prop)])))
     farms_sf$mk_estimate[i] <- mk$tau
     farms_sf$mk_p_value[i] <- mk$sl
+  }
+
+  # Find slope significance for each location
+  farms_sf$sens_significant <- rep(0, nrow(farms_sf))
+  farms_sf$mk_significant <- rep(0, nrow(farms_sf))
+  for (i in seq_len(nrow(farms_sf))) {
+    if (farms_sf$sens_p_value[i] < 0.05) {
+      if (farms_sf$sens_estimate[i] < 0) {
+        farms_sf$sens_significant[i] <- -1
+      } else {
+        farms_sf$sens_significant[i] <- 1
+      }
+    }
+    if (farms_sf$mk_p_value[i] < 0.05) {
+      if (farms_sf$mk_estimate[i] < 0) {
+        farms_sf$mk_significant[i] <- -1
+      } else {
+        farms_sf$mk_significant[i] <- 1
+      }
+    }
   }
 
   # Return sf dataframe

@@ -15,7 +15,6 @@ download_ghcnd <- function(ids, out_dir = paste0(getwd())) {
 
 #' Get all GHCNd station ids for a given country
 #'
-#' @param file_path file path where ghcnd-stations.txt is located
 #' @param country_code WMO country code
 #'
 #' @return character vector of station ids
@@ -24,16 +23,11 @@ download_ghcnd <- function(ids, out_dir = paste0(getwd())) {
 #' @importFrom stringr str_detect
 #'
 #' @export
-get_ghcnd_country_ids <- function(file_path, country_code) {
-  # Read in ids dataframe, assuming it comes from the ghcnd website
-  col_widths <- c(11, 74)
-  all_ids <- utils::read.fwf(file_path, widths = col_widths)
-  colnames(all_ids) <- c("station_id", "rest of stuff")
-
+get_ghcnd_country_ids <- function(country_code) {
   # Subset desired ids
-  desired_ids <- all_ids |>
-    dplyr::filter(stringr::str_detect(station_id, paste0("^", country_code))) |>
-    dplyr::select(station_id) |>
+  desired_ids <- mapler::ghcnd_stations |>
+    dplyr::filter(stringr::str_detect(.data$station_id, paste0("^", country_code))) |>
+    dplyr::select(.data$station_id) |>
     dplyr::pull()
 
   desired_ids

@@ -68,3 +68,44 @@
 #'   \item{long}{Longitude}
 #' }
 "farms_coords"
+
+
+#' LOCA2 Model Names
+#'
+#' LOCA2 model names scraped from the
+#'   [LOCA2 server](https://cirrus.ucsd.edu/~pierce/LOCA2/NAmer/).
+#'
+#' @format ## `loca2_model_names`
+#' A character vector with 27 elements.
+"loca2_model_names"
+
+
+#' GHCNd Station Data
+#'
+#' GHCNd station data pulled from
+#'   [ghcnd-stations.txt](https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt).
+#'
+#' @format ## `ghcnd_stations`
+#' A dataframe with 129658 rows and 9 columns:
+#' \describe{
+#'   \item{ID}{Station identification code}
+#'   \item{LATITUDE}{Station latitude in degrees}
+#'   \item{LONGITUDE}{Station longitude in degrees}
+#'   \item{ELEVATION}{Station elevation in meters}
+#'   \item{STATE}{U.S. postal code for the state (for U.S. stations only)}
+#'   \item{NAME}{Station name}
+#'   \item{GSN_FLAG}{Flag that indicates whether the station is part of
+#'     the GCOS Surface Network (GSN). Unique values are blank and "GSN"}
+#'   \item{HCN_CRN_FLAG}{Flag that indicates whether the station is part of the
+#'     U.S. Historical Climatology Network (HCN) or U.S. Climate Reference
+#'     Network (CRN). Unique values are blank, "HCN", and "CRN"}
+#'   \item{WMO_ID}{Station World Meteorological Organization (WMO) number}
+#' }
+"ghcnd_stations"
+
+
+#' U.S. State Abbreviations
+#'
+#' @format ## `us_states`
+#' A character vector with 50 elements.
+"us_states"

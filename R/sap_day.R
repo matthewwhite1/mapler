@@ -29,7 +29,7 @@
 #' @export
 sap_day <- function(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1, years = NULL) {
   # Error checking
-  if (class(tmax_rast) != "SpatRaster" || class(tmin_rast) != "SpatRaster") {
+  if (!inherits(tmax_rast, "SpatRaster") || !inherits(tmin_rast, "SpatRaster")) {
     stop("tmax_rast and tmin_rast must be terra rasters.")
   } else if (!all(terra::time(tmax_rast) == terra::time(tmin_rast))) {
     stop("tmax_rast and tmin_rast must have identical terra::time values.")
