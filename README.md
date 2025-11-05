@@ -104,22 +104,22 @@ library(terra)
 x <- rnorm(1000)
 sens_slope(x)
 #> $estimates
-#>   Sen's slope 
-#> -2.306566e-05 
+#>  Sen's slope 
+#> 8.884747e-05 
 #> 
 #> $statistic
-#>          z 
-#> -0.1967046 
+#>         z 
+#> 0.8288135 
 #> 
 #> $p.value
-#> [1] 0.8440587
+#> [1] 0.40721
 #> 
 #> $parameter
 #>    n 
 #> 1000 
 #> 
 #> $conf.int
-#> [1] -0.0002548089  0.0002063348
+#> [1] -0.0001237797  0.0003027638
 #> attr(,"conf.level")
 #> [1] 0.95
 
@@ -174,21 +174,27 @@ crop_lims <- c(xmin = -99, ymin = 32, xmax = -59, ymax = 53)
 world <- ne_countries(scale = "medium", returnclass = "sf")
 north_america <- world |>
   filter(region_un == "Americas", name %in% c("United States of America", "Canada")) |>
-  st_crop(crop_lims)
+  sf::st_crop(crop_lims)
 us_states <- ne_states(country = "United States of America", returnclass = "sf") |>
-  st_crop(crop_lims)
+  sf::st_crop(crop_lims)
 canada_provinces <- ne_states(country = "Canada", returnclass = "sf") |>
-  st_crop(crop_lims)
+  sf::st_crop(crop_lims)
+
+# Prepare colors
+breaks <- seq(-1, 1, by = 0.2)
+eco_regions_joined$sig_mean_class <- cut(eco_regions_joined$sig_mean, 
+                                         breaks, include.lowest = TRUE)
 
 # Plot eco regions colored by significance proportion
 ggplot() +
   geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2) +
   geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
   geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = eco_regions_joined, mapping = aes(fill = sig_mean)) +
+  geom_sf(data = eco_regions_joined, mapping = aes(fill = sig_mean_class)) +
   geom_sf(data = farms_sf, color = "black", size = 1.5) +
   coord_sf(xlim = c(-99, -59), ylim = c(32, 53), expand = FALSE) +
-  scale_fill_viridis_c(name = "Significance Proportion", option = "plasma") +
+  scale_fill_manual("Significance Proportion", 
+                    values = rev(RColorBrewer::brewer.pal(7, "OrRd"))) +
   theme_minimal() +
   labs(
     # title = "Significance of Sens Slope at Maple Farms",
@@ -213,15 +219,21 @@ variable <- "GEOID"
 us_counties_joined <- sens_farms(farms_coords = farms_sf, sap_prop = sap_prop,
                                  shapefile = shapefile, group_var = variable)
 
+# Prepare colors
+breaks <- seq(-1, 1, by = 0.2)
+us_counties_joined$sig_mean_class <- cut(us_counties_joined$sig_mean, 
+                                         breaks, include.lowest = TRUE)
+
 # Plot
 ggplot() +
   geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2) +
   geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
   geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = us_counties_joined, mapping = aes(fill = sig_mean)) +
+  geom_sf(data = us_counties_joined, mapping = aes(fill = sig_mean_class)) +
   geom_sf(data = farms_sf, color = "black", size = 0.5) +
   coord_sf(xlim = c(-99, -59), ylim = c(32, 53), expand = FALSE) +
-  scale_fill_viridis_c(name = "Significance Proportion", option = "plasma") +
+  scale_fill_manual("Significance Proportion", 
+                    values = rev(RColorBrewer::brewer.pal(5, "OrRd"))) +
   theme_minimal() +
   labs(
     # title = "Significance of Sens Slope at Maple Farms",
