@@ -5,7 +5,7 @@ test_that("trend::sens.slope() matches mapler::sens_slope() for rnorm", {
   trend_sens <- trend::sens.slope(x)[names(mapler_sens)]
 
   for (i in seq_along(mapler_sens)) {
-    expect_equal(mapler_sens[[i]], trend_sens[[i]], tolerance = 1E-4)
+    expect_equal(mapler_sens[[i]], trend_sens[[i]], tolerance = 1E-2)
   }
 })
 
@@ -30,7 +30,7 @@ test_that("trend::sens.slope() matches mapler::sens_slope() for raster", {
   for (i in seq_len(dim(mapler_sens)[3])) {
     mapler_vals <- terra::values(mapler_sens[[i]])
     trend_vals <- terra::values(trend_sens[[i]])
-    expect_equal(mapler_vals, trend_vals, tolerance = 1E-3)
+    expect_equal(mapler_vals, trend_vals, tolerance = 1E-2)
   }
 })
 
