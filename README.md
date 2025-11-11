@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/matthewwhite1/mapler/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/matthewwhite1/mapler/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of mapler is to provide functions to investigate how maple
@@ -104,22 +105,22 @@ library(terra)
 x <- rnorm(1000)
 sens_slope(x)
 #> $estimates
-#>  Sen's slope 
-#> 8.884747e-05 
+#>   Sen's slope 
+#> -8.374139e-05 
 #> 
 #> $statistic
-#>         z 
-#> 0.8288135 
+#>          z 
+#> -0.7791396 
 #> 
 #> $p.value
-#> [1] 0.40721
+#> [1] 0.4358975
 #> 
 #> $parameter
 #>    n 
 #> 1000 
 #> 
 #> $conf.int
-#> [1] -0.0001237797  0.0003027638
+#> [1] -0.0003010346  0.0001270490
 #> attr(,"conf.level")
 #> [1] 0.95
 
