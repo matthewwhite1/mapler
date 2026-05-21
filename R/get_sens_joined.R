@@ -64,7 +64,8 @@ get_sens_joined <- function(farms_sf, shapefile, group_var, sig_var = "sens_sign
   farm_sig_mean <- farms_joined |>
     sf::st_drop_geometry() |>
     dplyr::group_by(.data[[group_var]]) |>
-    dplyr::summarize(sig_mean = mean(.data[[sig_var]]))
+    dplyr::summarize(sig_mean = mean(.data[[sig_var]]),
+                     n_farms = n())
   names(farm_sig_mean) <- stringr::str_remove_all(names(farm_sig_mean), "\"")
 
   # Rejoin back into shapefile table

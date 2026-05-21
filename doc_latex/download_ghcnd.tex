@@ -1,0 +1,31 @@
+\inputencoding{utf8}
+\HeaderA{download\_ghcnd}{Download GHCNd files with given ids}{download.Rul.ghcnd}
+%
+\begin{Description}
+Download GHCNd files with given ids
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+download_ghcnd(ids, out_dir = paste0(getwd()))
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{ids}] character vector of GHCNd station ids
+
+\item[\code{out\_dir}] name of the directory where the files will be downloaded to
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+# Download files for all U.S. stations
+my_ids <- get_ghcnd_country_ids("US")
+download_ghcnd(my_ids)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}

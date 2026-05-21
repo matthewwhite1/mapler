@@ -1,0 +1,26 @@
+\inputencoding{utf8}
+\HeaderA{mean\_temp\_projection}{Calculate yearly mean temperatures from temperature rasters}{mean.Rul.temp.Rul.projection}
+%
+\begin{Description}
+Calculate yearly mean temperatures from temperature rasters
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+mean_temp_projection(tmax_rast, tmin_rast)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{tmax\_rast}] terra raster stack of tmax values that must have terra::time
+values containing date information to subset by year
+
+\item[\code{tmin\_rast}] terra raster stack of tmin values that must have terra::time
+values containing date information to subset by year
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+raster stack of yearly mean temperatures
+\end{Value}

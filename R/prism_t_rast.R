@@ -26,7 +26,7 @@ prism_t_rast <- function(filepath, folders = FALSE) {
   # Define years vector based on whether there are year folders
   if (folders) {
     # Check ordering of year folders
-    year_folders <- list.dirs(filepath, full.names = TRUE)
+    year_folders <- list.dirs(filepath, full.names = TRUE, recursive = FALSE)
     years <- as.integer(stringr::str_extract(basename(year_folders),
                                              "[[:digit:]]{4}"))
 

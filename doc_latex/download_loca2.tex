@@ -1,0 +1,74 @@
+\inputencoding{utf8}
+\HeaderA{download\_loca2}{Download LOCA2 netCDF files}{download.Rul.loca2}
+%
+\begin{Description}
+This function can be used to download daily netCDF files from LOCA2.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+download_loca2(
+  model,
+  run = 1,
+  scenario = c("historical", "ssp585"),
+  var = c("pr", "tasmax", "tasmin"),
+  out_dir = paste0(getwd())
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{model}] character vector of models. These must exactly
+match the LOCA2 model names (Ex: "ACCESS-CM2")
+
+\item[\code{run}] integer vector of model runs. A run of 1 corresponds to the
+first run of the model (Ex: r1i1p1f1), a run of 2 corresponds to the second
+run of the model, and so on
+
+\item[\code{scenario}] character vector of future climate scenarios. Each value
+in this vector must be either historical, ssp245, ssp370, or ssp585
+
+\item[\code{var}] character vector of variables to download. Each value in this
+vector must be either pr (precipitation), tasmax (maximum temperature),
+tasmin (minimum temperature), or DTR (difference between maximum and
+minimum temperature)
+
+\item[\code{out\_dir}] name of the output directory that will store the
+downloaded files
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}
+When filtering for files to download, this function excludes files
+that include "yearly" or "monthly", and it only downloads files that are
+at least 1 gigabyte in size. Keep in mind that even downloading the files
+for just one run of one model can take multiple hours, as these models
+contain some large files.
+\end{Details}
+%
+\begin{Source}
+\url{https://cirrus.ucsd.edu/~pierce/LOCA2/NAmer/}
+\end{Source}
+%
+\begin{SeeAlso}
+\LinkA{loca2\_model\_names}{loca2.Rul.model.Rul.names}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+# Download all files from first LOCA2 model
+download_loca2(model = "ACCESS-CM2",
+               run = 1,
+               scenario = "ssp585",
+               var = c("pr", "tasmax", "tasmin"))
+
+# Download all files with multiple models, runs, and scenarios
+download_loca2(model = c("ACCESS-CM2", "ACCESS-ESM1-5", "AWI-CM-1-1-MR"),
+               run = c(1, 2, 3),
+               scenario = c("ssp245", "ssp370", "ssp585"))
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}

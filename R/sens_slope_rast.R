@@ -15,6 +15,9 @@
 #' @export
 sens_slope_rast <- function(t_rast, cores = 1) {
   t_rast_slope <- terra::app(t_rast, sens_slope_rast_helper, cores = cores)
+  t_rast_slope <- t_rast_slope[[-4]]
+  names(t_rast_slope) <- c("estimates", "statistic", "p.value",
+                           "conf.low", "conf.high")
   t_rast_slope
 }
 

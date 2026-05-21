@@ -1,0 +1,32 @@
+\inputencoding{utf8}
+\HeaderA{sens\_slope}{Calculate the Sen's slope for a numeric vector}{sens.Rul.slope}
+%
+\begin{Description}
+Calculate the Sen's slope for a numeric vector
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+sens_slope(x, conf_level = 0.95)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] numeric vector
+
+\item[\code{conf\_level}] numeric confidence level
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+list of five items: Sen's slope estimate,
+z statistic, p-value, sample size, and confidence interval
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+x <- rnorm(1000)
+sens_slope(x)
+\end{ExampleCode}
+\end{Examples}

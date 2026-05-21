@@ -1,0 +1,62 @@
+\inputencoding{utf8}
+\HeaderA{sap\_day}{Calculate ideal sap days from temperature rasters}{sap.Rul.day}
+%
+\begin{Description}
+Maple sap flows the most on days where temperatures are oscillating between
+freezing and thawing, known as the freeze/thaw cycle. This function uses
+tmax and tmin rasters (potentially loaded in from \code{\LinkA{loca\_t\_rast()}{loca.Rul.t.Rul.rast}} or
+\code{\LinkA{prism\_t\_rast()}{prism.Rul.t.Rul.rast}}) to calculate the proportion and sum of days in each year
+that are ideal for maple sap tapping. Using a 30-year record of sap flow
+and weather observations at the Uihlein Forest, Lake Placid, NY, sap flow
+occurred on 80\% of the days when the minimum temperature fell below
+-1.1 °C and maximum temperature exceeded 2.2 °C, which is where the
+default values for the temperature threshold come from (Skinner et al.
+2010).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+sap_day(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1, years = NULL)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{tmax\_rast}] terra raster stack of tmax values that must have terra::time
+values containing date information to subset by year
+
+\item[\code{tmin\_rast}] terra raster stack of tmin values that must have terra::time
+values containing date information to subset by year
+
+\item[\code{t\_upper}] upper temperature value for the freeze/thaw cycle that
+will be used in a logical statement to find ideal sap tapping days
+
+\item[\code{t\_lower}] lower temperature value for the freeze/thaw cycle that
+will be used in a logical statement to find ideal sap tapping days
+
+\item[\code{years}] integer vector of years to subset the raster stacks by. All
+of the years must be present in the raster stacks
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+list of length two - a raster stack of the proportion of ideal
+sap tapping days per year, and a raster stack of the sum of ideal sap
+tapping days per year
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+# Load in rasters
+loca_rast <- loca_t_rast("D:/Data/LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1/")
+
+# Calculate yearly sap days
+k_upper <- 2.2 + 273.15
+k_lower <- -1.1 + 273.15
+loca_sap_day <- sap_day(loca_rast$tmax, loca_rast$tmin,
+                        t_upper = k_upper, t_lower = k_lower)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}

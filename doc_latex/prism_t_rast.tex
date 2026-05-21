@@ -1,0 +1,36 @@
+\inputencoding{utf8}
+\HeaderA{prism\_t\_rast}{Load PRISM tmax and tmin files into rasters}{prism.Rul.t.Rul.rast}
+%
+\begin{Description}
+Load PRISM tmax and tmin files into rasters
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+prism_t_rast(filepath, folders = FALSE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{filepath}] character file path where files are located
+
+\item[\code{folders}] boolean. If TRUE, the filepath contains folders that are
+organized by year (1981, 1982, etc.). If FALSE, the filepath must contain
+tmax and tmin .bil files
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+list of length two - the tmax raster stack and the tmin raster
+stack
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+prism_t_rast("D:/Data/PRISM", folders = TRUE)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}

@@ -1,0 +1,45 @@
+\inputencoding{utf8}
+\HeaderA{get\_sens\_farms}{Get the Sen's slope estimate and p-value given an sf dataframe of farm locations}{get.Rul.sens.Rul.farms}
+%
+\begin{Description}
+This function takes an sf dataframe of (assumed) farm coordinates. Then, it
+extracts the time series of yearly sap day proportions for each farm. Sen's
+slope is calculated for each time series. The slope estimate and p-value are
+added as columns to the extracted data frame.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+get_sens_farms(farms_coords, sap_prop, elevation = NULL)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{farms\_coords}] sf dataframe containing farms and their coordinates
+
+\item[\code{sap\_prop}] terra SpatRaster containing yearly sap day proportion
+rasters, probably calculated from \code{\LinkA{sap\_day()}{sap.Rul.day}}
+
+\item[\code{elevation}] one layer terra SpatRaster containing elevation values
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+sf dataframe containing the time series of sap day proportions
+for each year, the geometry, the Sen's slope estimate, and the Sen's slope
+p-value
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+# Read in farm coordinates and sap day projection
+farms_sf <- sf::st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
+test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
+                              package = "mapler")
+sap_prop <- terra::rast(test_loca_file)
+
+# Get Sen's slope for every farm
+get_sens_farms(farms_sf, sap_prop)
+\end{ExampleCode}
+\end{Examples}

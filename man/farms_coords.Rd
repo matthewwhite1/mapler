@@ -14,7 +14,7 @@ A dataframe with 444 rows and 6 columns:
 \item{state}{U.S. state/Canada province}
 \item{region}{U.S. state/Canada province region}
 \item{lat}{Latitude}
-\item{long}{Longitude}
+\item{lon}{Longitude}
 }
 }
 }
@@ -27,6 +27,6 @@ Maple syrup farm addresses and coordinates scraped from
 \href{https://www.bonjourquebec.com/en-us/to-see-and-do/delicious-discoveries/sugar-shacks}{bonjourquebec.com}.
 Since scraping the farm names was complicated, a few farm names are cut
 off at the first hyphen. Farm addresses were geocoded with
-\code{\link[tidygeocoder:geocode]{tidygeocoder::geocode()}}.
+\code{\link[ggmap:geocode]{ggmap::geocode()}}.
 }
 \keyword{datasets}

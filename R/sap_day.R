@@ -48,17 +48,18 @@ sap_day <- function(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1, years =
     stop("t_upper must be numeric.")
   } else if (!is.numeric(t_lower)) {
     stop("t_lower must be numeric.")
-  } else if (!is.numeric(years) || !is.vector(years)) {
-    stop("years must be numeric vector.")
   }
 
   # Extract years for subsetting
+  dates <- terra::time(tmax_rast)
+  rast_years <- as.integer(stringr::str_extract(dates, "[[:digit:]]{4}"))
   if (!is.null(years)) {
+    if (!is.numeric(years) || !is.vector(years)) {
+      stop("years must be numeric vector.")
+    }
     unique_years <- years
   } else {
-    dates <- terra::time(tmax_rast)
-    years <- as.integer(stringr::str_extract(dates, "[[:digit:]]{4}"))
-    unique_years <- sort(unique(years))
+    unique_years <- sort(unique(rast_years))
   }
 
   # Initialize empty lists
@@ -68,7 +69,7 @@ sap_day <- function(tmax_rast, tmin_rast, t_upper = 2.2, t_lower = -1.1, years =
   # For each year...
   for (i in seq_along(unique_years)) {
     # Subset rasters by year
-    year_layers <- which(years == unique_years[i])
+    year_layers <- which(rast_years == unique_years[i])
     tmax_year <- tmax_rast[[year_layers]]
     tmin_year <- tmin_rast[[year_layers]]
 

@@ -1,30 +1,74 @@
-### Within scenario ssp585, first run of first three LOCA2 models
 # Define stuff
-models <- c("ACCESS-CM2", "ACCESS-ESM1-5", "AWI-CM-1-1-MR")
-k_upper <- 2.2 + 273.15
-k_lower <- -1.1 + 273.15
+models <- loca2_model_names
+models <- models[10:27]
+
+# Standard thresholds
+# k_upper <- 2.2 + 273.15
+# k_lower <- -1.1 + 273.15
+
+# Optimal boxelder thresholds
+# k_upper <- 6.2 + 273.15
+# k_lower <- -6.2 + 273.15
+
+# Optimal Norway maple thresholds
+k_upper <- 6.6 + 273.15
+k_lower <- -5.1 + 273.15
 
 ## Create sap days for all models
-for (i in 1) {
-  # Load in rasters
-  path <- paste0("F:/Data/LOCA2/", models[i], "/0p0625deg/r1i1p1f1")
-  loca_rast <- loca_t_rast(path)
+for (i in seq_along(models)) {
+  # Break if folder doesn't exist
+  if (!(models[i] %in% list.files("F:/LOCA2/"))) {
+    next
+  }
 
-  # Calculate sap days for model
-  model_sap_day <- sap_day(loca_rast$tmax, loca_rast$tmin, k_upper, k_lower)
+  # Get available runs
+  runs <- list.files(paste0("F:/LOCA2/", models[i], "/0p0625deg/"))
 
-  # Write rasters to drive
-  propname <- paste0("D:/Data/LOCA2/", models[i], "_run1_ssp585_prop.tif")
-  terra::writeRaster(model_sap_day$proportion, propname)
-  sumname <- paste0("D:/Data/LOCA2/", models[i], "_run1_ssp585_sum.tif")
-  terra::writeRaster(model_sap_day$sum, sumname)
+  # For each run...
+  for (j in seq_along(runs)) {
+    # Calculate sap days for historical
+    run_path <- paste0("F:/LOCA2/", models[i], "/0p0625deg/", runs[j])
+    historical_rast <- loca_t_rast(run_path, scenario = "historical")
+    historical_sap_day <- sap_day(historical_rast$tmax, historical_rast$tmin, k_upper, k_lower)
 
-  # Garbage collection
-  terra::tmpFiles(current = TRUE, orphan = TRUE, old = TRUE, remove = TRUE)
-  gc()
-  rm(loca_rast)
-  rm(model_sap_day)
+    # Get available scenarios
+    scenarios <- list.files(run_path)
+    scenarios <- scenarios[scenarios != "historical"]
+
+    # For each scenario...
+    for (k in seq_along(scenarios)) {
+      # Load in rasters
+      scenario_rast <- loca_t_rast(run_path, scenario = scenarios[k])
+
+      # Calculate sap days for model
+      scenario_sap_day <- sap_day(scenario_rast$tmax, scenario_rast$tmin, k_upper, k_lower)
+
+      # Combine historical and scenario
+      model_sap_day <- list()
+      model_sap_day$proportion <- c(historical_sap_day$proportion, scenario_sap_day$proportion)
+      model_sap_day$sum <- c(historical_sap_day$sum, scenario_sap_day$sum)
+
+      # Get run num
+      run_num <- stringr::str_extract(runs[j], "r\\d") |>
+        stringr::str_replace("r", "run")
+
+      # Write rasters to drive
+      propname <- paste0("F:/LOCA2/", models[i], "_", run_num, "_", scenarios[k], "_prop.tif")
+      terra::writeRaster(model_sap_day$proportion, propname)
+      sumname <- paste0("F:/LOCA2/", models[i], "_", run_num, "_", scenarios[k], "_sum.tif")
+      terra::writeRaster(model_sap_day$sum, sumname)
+    }
+
+    # Garbage collection
+    terra::tmpFiles(current = TRUE, orphan = TRUE, old = TRUE, remove = TRUE)
+    gc()
+    rm(historical_sap_day)
+    rm(scenario_sap_day)
+    rm(model_sap_day)
+  }
 }
+
+
 
 ########## asdjfsa; fdkljsa;dfjk
 path <- "F:/Data/LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1"

@@ -1,0 +1,40 @@
+\inputencoding{utf8}
+\HeaderA{ghcnd\_stations}{GHCNd Station Data}{ghcnd.Rul.stations}
+\keyword{datasets}{ghcnd\_stations}
+%
+\begin{Description}
+GHCNd station data pulled from
+\Rhref{https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt}{ghcnd-stations.txt}.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+ghcnd_stations
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+%
+\begin{SubSection}{\code{ghcnd\_stations}}
+
+A dataframe with 129658 rows and 9 columns:
+\begin{description}
+
+\item[ID] Station identification code
+\item[LATITUDE] Station latitude in degrees
+\item[LONGITUDE] Station longitude in degrees
+\item[ELEVATION] Station elevation in meters
+\item[STATE] U.S. postal code for the state (for U.S. stations only)
+\item[NAME] Station name
+\item[GSN\_FLAG] Flag that indicates whether the station is part of
+the GCOS Surface Network (GSN). Unique values are blank and "GSN"
+\item[HCN\_CRN\_FLAG] Flag that indicates whether the station is part of the
+U.S. Historical Climatology Network (HCN) or U.S. Climate Reference
+Network (CRN). Unique values are blank, "HCN", and "CRN"
+\item[WMO\_ID] Station World Meteorological Organization (WMO) number
+
+\end{description}
+
+\end{SubSection}
+
+\end{Format}
