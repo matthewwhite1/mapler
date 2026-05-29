@@ -119,7 +119,8 @@ comp <- models_comparison |>
   summarize(prop_overest_variance_mean = mean(prop_overest_variance),
             mean_p_value_mean = mean(mean_p_value),
             mean_distance_mean = mean(mean_distance)) |>
-  arrange(prop_overest_variance_mean)
+  arrange(mean_distance_mean) |>
+  select(model, mean_distance_mean, mean_p_value_mean, prop_overest_variance_mean)
 
 # Make plots
 g1 <- ggplot(models_comparison, aes(mean_distance)) +
@@ -131,18 +132,27 @@ g1 <- ggplot(models_comparison, aes(mean_distance)) +
                      limits = c(0, 50)) +
   theme(text = element_text(size = 14))
 
-g2 <- ggplot(models_comparison, aes(prop_overest_variance)) +
+g2 <- ggplot(models_comparison, aes(mean_p_value)) +
+  geom_histogram(breaks = seq(0.05, 0.3, by = 0.025),
+                 color = "black") +
+  theme_bw() +
+  scale_x_continuous("Mean P-value", breaks = seq(0.05, 0.3, by = 0.05)) +
+  scale_y_continuous("Count", breaks = seq(0, 50, by = 10), limits = c(0, 50)) +
+  theme(text = element_text(size = 14))
+
+g3 <- ggplot(models_comparison, aes(prop_overest_variance)) +
   geom_histogram(breaks = seq(0.3, 0.75, by = 0.05),
                  color = "black") +
   theme_bw() +
-  scale_x_continuous("Mean Proportion of Years Where Model Overestimates PRISM Variance",
+  scale_x_continuous("Mean Proportion of Pixels Where Model Overestimates PRISM Variance",
                      breaks = seq(0.3, 0.75, by = 0.05)) +
   scale_y_continuous("Count", breaks = seq(0, 40, by = 10),
                      limits = c(0, 40)) +
   theme(text = element_text(size = 14))
 
-jpeg("figures/models_comparison_hists.jpg", width = 7, height = 5, units = "in", res = 600)
-grid.arrange(g1, g2, nrow = 2)
+
+jpeg("figures/models_comparison_hists.jpg", width = 7, height = 6, units = "in", res = 600)
+grid.arrange(g1, g2, g3, nrow = 3)
 dev.off()
 
 jpeg("figures/models_comparison_best_models.jpg", width = 7, height = 5, units = "in", res = 600)

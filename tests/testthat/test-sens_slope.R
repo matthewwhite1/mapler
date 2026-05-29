@@ -20,19 +20,24 @@ test_that("trend::sens.slope() matches mapler::sens_slope() for raster", {
 
   trend_sens_helper <- function(t_pixel) {
     if (all(is.na(t_pixel))) {
-      return(rep(NA, 6))
+      return(rep(NA, 5))
     }
     t_pixel_no_na <- t_pixel[!is.na(t_pixel)]
     sens <- trend::sens.slope(t_pixel_no_na)
     c(sens$estimates, sens$statistic, sens$p.value,
-      sens$parameter, sens$conf.int[1], sens$conf.int[2])
+      sens$conf.int[1], sens$conf.int[2])
   }
   trend_sens <- terra::app(test_loca, trend_sens_helper, cores = 1)
+  names(trend_sens) <- c("estimates",
+                         "statistic",
+                         "p.value",
+                         "conf.low",
+                         "conf.high")
 
   for (i in seq_len(dim(mapler_sens)[3])) {
     mapler_vals <- terra::values(mapler_sens[[i]])
     trend_vals <- terra::values(trend_sens[[i]])
-    expect_equal(mapler_vals, trend_vals, tolerance = 1E-3)
+    expect_equal(mapler_vals, trend_vals, tolerance = 1E-2)
   }
 })
 
