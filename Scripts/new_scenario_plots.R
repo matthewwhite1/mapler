@@ -99,7 +99,7 @@ final_df <- final_df |>
   filter(n_farms >= 5) |>
   mutate(threshold = factor(threshold, levels = c("sugar", "boxelder", "norway"))) |>
   mutate(threshold = recode(threshold,
-                            skinner = "Sugar",
+                            sugar = "Sugar",
                             boxelder = "Boxelder",
                             norway = "Norway"))
 # sig_mean_color <- brewer.pal(10, "RdBu")[scenario_df$sig_mean_class]

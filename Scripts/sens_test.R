@@ -3,6 +3,38 @@ library(terra)
 library(sf)
 library(Metrics)
 
+### Test speed on random normal vectors ###
+# Initialize stuff
+median_time <- rep(NA, 8)
+mem_alloc <- rep(NA, 8)
+count <- 1
+sizes <- c(50, 100, 500, 1000)
+
+# For each sample size...
+for (i in seq_along(sizes)) {
+  my_sample <- rnorm(sizes[i])
+  benchmark <- bench::mark(trend::sens.slope(my_sample),
+                           mapler::sens_slope(my_sample),
+                           check = FALSE,
+                           iterations = 500)
+  median_time[count] <- benchmark$median[1]
+  mem_alloc[count] <- benchmark$mem_alloc[1]
+  count <- count + 1
+  median_time[count] <- benchmark$median[2]
+  mem_alloc[count] <- benchmark$mem_alloc[2]
+  count <- count + 1
+  print(i)
+}
+
+# Get median in ms
+median_time_ms <- median_time * 1000
+
+# Get memory allocation in MB
+mem_alloc_mb <- mem_alloc / 1000000
+
+View(data.frame(count = count, median_time_ms = median_time_ms,
+                mem_alloc_mb = mem_alloc_mb))
+
 ### Test speed on maple farms ###
 # Load in raster stack
 sap_day_access <- terra::rast("F:/Data/LOCA2/sugar_sap_days/ACCESS-CM2_run1_ssp585_prop.tif") |>
@@ -35,7 +67,8 @@ for (i in seq_len(n_farms)) {
   # Run benchmark
   benchmark <- bench::mark(trend::sens.slope(sap_prop),
                            sens_slope(sap_prop),
-                           check = FALSE)
+                           check = FALSE,
+                           iterations = 500)
 
   # Save results
   trend_median[i] <- benchmark$median[1]
@@ -121,4 +154,5 @@ sens.slope_rast <- function(t_rast) {
 }
 
 # Benchmark
-bench::mark(sens.slope_rast(sap_prop), sens_slope_rast(sap_prop), check = FALSE)
+bench::mark(sens.slope_rast(sap_prop), sens_slope_rast(sap_prop), check = FALSE,
+            iterations = 5)

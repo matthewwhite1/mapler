@@ -77,6 +77,19 @@ for (i in seq_along(threshes)) {
   }
 }
 
+# Read in rasters
+scenarios <- c("ssp245", "ssp370", "ssp585")
+threshes <- c("sugar", "boxelder", "norway")
+sig_rast_list <- list()
+count <- 1
+for (i in seq_along(threshes)) {
+  for (j in seq_along(scenarios)) {
+    filename <- paste0("F:/Data/LOCA2/sens_all_loca/", threshes[i], "_", scenarios[j], ".tif")
+    sig_rast_list[[count]] <- terra::rast(filename)
+    count <- count + 1
+  }
+}
+
 # Get North America map
 world <- ne_countries(scale = "medium", returnclass = "sf")
 us_states <- ne_states(country = "United States of America", returnclass = "sf")

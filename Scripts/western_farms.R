@@ -10,6 +10,8 @@ library(RColorBrewer)
 western_farms_coords <- read_csv("Data_Clean/western_farms_coords.csv")
 western_farms_sf <- sf::st_as_sf(western_farms_coords,
                                  coords = c("longitude", "latitude"), crs = 4326)
+western_farms_sf <- western_farms_sf |>
+  mutate(species = str_remove(species, " maple"))
 
 # Get North America map
 crop_lims <- c(xmin = -118, ymin = 32, xmax = -94, ymax = 50)
@@ -24,11 +26,11 @@ us_states <- ne_states(country = "United States of America", returnclass = "sf")
 ggplot() +
   geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2) +
   geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
+  # geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
   geom_sf(data = western_farms_sf, mapping = aes(color = species), size = 1, alpha = 1) +
-  scale_color_brewer(palette = "Dark2") +
+  scale_color_brewer("Species", palette = "Dark2") +
   scale_y_continuous(limits = c(34, 48.3)) +
-  theme_minimal() +
+  theme_bw() +
   xlab("Longitude") +
   ylab("Latitude") +
   theme(text = element_text(size = 16))

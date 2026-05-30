@@ -31,12 +31,12 @@ cache_map <- ggmap::get_map("Cache Valley, Utah", source = "google")
 jpeg("figures/cache_prism.jpg", width = 7, height = 5, units = "in", res = 600)
 ggmap(cache_map) +
   geom_spatraster(data = prism_cache, aes(fill = cuts), alpha = 0.6) +
-  scale_fill_manual(values = brewer.pal(4, "RdPu"), name = "Mean Temperature") +
+  scale_fill_manual(values = brewer.pal(4, "RdPu"), name = "Mean Temperature (°C)") +
   scale_x_continuous("Longtitude", limits = c(-112.05, -111.7),
                      breaks = seq(-112.05, -111.75, by = 0.15)) +
   scale_y_continuous("Latitude", limits = c(41.54, 42.063),
                      breaks = seq(41.55, 42.05, by = 0.1)) +
-  theme_minimal() +
+  theme_bw() +
   theme(plot.title = element_text(hjust = 0.5),
         panel.grid = element_blank(),
         text = element_text(size = 16))
@@ -94,7 +94,7 @@ rapp_sf$name <- sites
 # Plot
 jpeg("figures/rapp_site_locations.jpg", width = 7, height = 5, units = "in", res = 600)
 ggplot() +
-  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2) +
+  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2, alpha = 0.7) +
   geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
   geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
   geom_sf(data = rapp_sf, color = "orange", size = 2) +
@@ -103,10 +103,11 @@ ggplot() +
                             stat = "sf_coordinates",
                             size = 2.5) +
   coord_sf(xlim = c(-90, -60), ylim = c(32, 53), expand = FALSE) +
-  theme_minimal() +
+  theme_bw() +
   xlab("Longitude") +
   ylab("Latitude") +
-  theme(text = element_text(size = 16))
+  theme(text = element_text(size = 16),
+        panel.grid.major = element_line(linewidth = 1))
 dev.off()
 
 
@@ -223,12 +224,12 @@ sens_categories <- sens_categories |>
   mutate(cuts = factor(significance))
 
 # Plot
-jpeg("figures/sens_slope_rast.jpg", width = 7, height = 5, units = "in", res = 600)
+jpeg("figures/sens_slope_rast.jpg", width = 9, height = 6, units = "in", res = 600)
 ggplot() +
-  geom_spatraster(data = sens_categories, aes(fill = cuts)) +
+  geom_spatraster(data = sens_categories, aes(fill = cuts), alpha = 0.8) +
   geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
   geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
-  scale_fill_manual(values = brewer.pal(4, "PuOr"),
+  scale_fill_manual(values = brewer.pal(4, "BrBG"),
                     labels = c("Positive significant",
                                "Positive non-significant",
                                "Negative non-significant",
@@ -242,13 +243,14 @@ ggplot() +
   theme(text = element_text(size = 16),
         legend.text = element_text(size = 10),
         legend.title = element_text(size = 10),
-        legend.position = "bottom")
+        legend.position = "bottom",
+        panel.grid.major = element_line(linewidth = 1))
 dev.off()
 
 
 ### Sen's Farms Ecoregions Example ###
 # Load in raster stack
-sap_day_access <- terra::rast("F:/Data/LOCA2/skinner_sap_days/ACCESS-CM2_run1_ssp585_prop.tif") |>
+sap_day_access <- terra::rast("F:/Data/LOCA2/sugar_sap_days/ACCESS-CM2_run1_ssp585_prop.tif") |>
   terra::shift(dx = -360)
 
 # Read in farm coordinates
@@ -278,37 +280,53 @@ canada_provinces <- ne_states(country = "Canada", returnclass = "sf") |>
   st_crop(crop_lims)
 
 # Create discrete breaks
+all_levels <- levels(cut(seq(-1, 1, by = 0.2), seq(-1, 1, by = 0.2), include.lowest = TRUE))
 eco_regions_joined <- eco_regions_joined |>
-  dplyr::mutate(cuts = cut(sig_mean, c(-1, -0.9, -0.8, -0.6, -0.5, -0.1, 0, 0.3, 0.5), include.lowest = TRUE))
+  dplyr::mutate(cuts = factor(cut(sig_mean, seq(-1, 1, by = 0.2), include.lowest = TRUE),
+                              levels = all_levels))
+
+# Code from Claude
+# Add phantom rows for missing levels so the legend renders them
+missing_levels <- all_levels[!all_levels %in% as.character(eco_regions_joined$cuts)]
+dummy_rows <- eco_regions_joined[rep(1, length(missing_levels)), ] |>
+  dplyr::mutate(
+    cuts = factor(missing_levels, levels = all_levels),
+    geometry = sf::st_sfc(lapply(seq_along(missing_levels),
+                                 function(x) sf::st_point(c(NA_real_, NA_real_))),
+                          crs = sf::st_crs(eco_regions_joined))
+  )
+eco_regions_plot <- dplyr::bind_rows(eco_regions_joined, dummy_rows)
 
 # Define color palette
-my_palette <- rev(brewer.pal(8, "PuOr"))[c(1, 2, 3, 4, 6, 7)]
+my_palette <- rev(brewer.pal(10, "PuOr"))
 
 # Plot
-jpeg("figures/sens_eco_regions.jpg", width = 7, height = 5, units = "in", res = 600)
+jpeg("figures/sens_eco_regions.jpg", width = 9, height = 8, units = "in", res = 600)
 ggplot() +
-  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2) +
+  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2, alpha = 0.7) +
   geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
   geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = eco_regions_joined, aes(fill = cuts)) +
+  geom_sf(data = eco_regions_plot, aes(fill = cuts)) +
   geom_sf(data = farms_sf, color = "black", size = 0.5) +
   coord_sf(xlim = c(-96, -60), ylim = c(33, 52)) +
-  scale_fill_manual("Significance Proportion", values = my_palette) +
-  theme_minimal() +
+  scale_fill_manual("Significance Proportion", values = setNames(my_palette, all_levels),
+                    na.translate = FALSE, drop = FALSE) +
+  theme_bw() +
   labs(
     x = "Longitude",
     y = "Latitude"
   ) +
   theme(legend.position = "inside",
-        legend.position.inside = c(0.85, 0.22),
+        legend.position.inside = c(0.85, 0.27),
         text = element_text(size = 16),
         legend.text = element_text(size = 10),
-        legend.title = element_text(size = 10))
+        legend.title = element_text(size = 10),
+        panel.grid.major = element_line(linewidth = 1))
 dev.off()
 
 
 ### Sen's Farms Counties Example ###
-sap_day_access <- terra::rast("F:/Data/LOCA2/skinner_sap_days/ACCESS-CM2_run1_ssp585_prop.tif") |>
+sap_day_access <- terra::rast("F:/Data/LOCA2/sugar_sap_days/ACCESS-CM2_run1_ssp585_prop.tif") |>
   terra::shift(dx = -360)
 
 # Read in farm coordinates
@@ -334,23 +352,37 @@ canada_provinces <- ne_states(country = "Canada", returnclass = "sf") |>
   st_crop(crop_lims)
 
 # Create discrete breaks
+all_levels <- levels(cut(seq(-1, 1, by = 0.2), seq(-1, 1, by = 0.2), include.lowest = TRUE))
 us_counties_joined <- us_counties_joined |>
-  dplyr::mutate(cuts = cut(sig_mean, c(-1, -0.8, -0.5, -0.3, -0.1, 0.1, 0.3, 0.7, 1), include.lowest = TRUE))
+  dplyr::mutate(cuts = factor(cut(sig_mean, seq(-1, 1, by = 0.2), include.lowest = TRUE),
+                              levels = all_levels))
+
+# Code from Claude
+# Add phantom rows for missing levels so the legend renders them
+missing_levels <- all_levels[!all_levels %in% as.character(us_counties_joined$cuts)]
+dummy_rows <- us_counties_joined[rep(1, length(missing_levels)), ] |>
+  dplyr::mutate(
+    cuts = factor(missing_levels, levels = all_levels),
+    geometry = sf::st_sfc(lapply(seq_along(missing_levels),
+                                 function(x) sf::st_point(c(NA_real_, NA_real_))),
+                          crs = sf::st_crs(us_counties_joined))
+  )
+us_counties_plot <- dplyr::bind_rows(us_counties_joined, dummy_rows)
 
 # Define color palette
-my_palette <- rev(brewer.pal(7, "PuOr"))
+my_palette <- rev(brewer.pal(10, "PuOr"))
 
 # Plot
-jpeg("figures/sens_us_counties.jpg", width = 7, height = 5, units = "in", res = 600)
+jpeg("figures/sens_us_counties.jpg", width = 10, height = 9, units = "in", res = 600)
 ggplot() +
-  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2) +
+  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2, alpha = 0.7) +
   geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
   geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = us_counties_joined, aes(fill = cuts)) +
+  geom_sf(data = us_counties_plot, aes(fill = cuts)) +
   geom_sf(data = farms_sf, color = "black", size = 0.3) +
   coord_sf(xlim = c(-95, -59), ylim = c(35, 50), expand = FALSE) +
   scale_fill_manual("Significance Proportion", values = my_palette) +
-  theme_minimal() +
+  theme_bw() +
   labs(
     x = "Longitude",
     y = "Latitude"
@@ -359,5 +391,6 @@ ggplot() +
         legend.position.inside = c(0.85, 0.29),
         text = element_text(size = 16),
         legend.text = element_text(size = 10),
-        legend.title = element_text(size = 10))
+        legend.title = element_text(size = 10),
+        panel.grid.major = element_line(linewidth = 1))
 dev.off()

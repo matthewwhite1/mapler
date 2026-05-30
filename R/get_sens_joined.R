@@ -24,7 +24,7 @@
 #' @examples
 #' \dontrun{
 #' # Read in farm coordinates and sap day projection
-#' farms_sf <- sf::st_as_sf(farms_coords, coords = c("long", "lat"), crs = 4326)
+#' farms_sf <- sf::st_as_sf(farms_coords, coords = c("lon", "lat"), crs = 4326)
 #' test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
 #'                               package = "mapler")
 #' sap_prop <- terra::rast(test_loca_file)
