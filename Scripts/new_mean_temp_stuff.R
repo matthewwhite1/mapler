@@ -104,3 +104,6 @@ for (i in 1:15) {
   (gs[[5]] + gs[[10]] + gs[[15]]) +
   plot_layout(guides = "collect")
 ggsave("figures/mean_temp_conus_all_loca.pdf", width = 7, height = 9)
+
+wrap_plots(gs, ncol = 5, guides = "collect")
+ggsave("figures/mean_temp_conus_all_loca_wide.pdf", width = 10, height = 7)
