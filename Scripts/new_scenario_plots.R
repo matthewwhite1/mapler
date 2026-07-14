@@ -79,21 +79,17 @@ for (l in 1:3) {
 }
 
 # Get North America map
-crop_lims <- c(xmin = -99, ymin = 32, xmax = -59, ymax = 53)
 world <- ne_countries(scale = "medium", returnclass = "sf")
 north_america <- world |>
-  filter(region_un == "Americas", name %in% c("United States of America", "Canada")) |>
-  st_crop(crop_lims)
-us_states <- ne_states(country = "United States of America", returnclass = "sf") |>
-  st_crop(crop_lims)
-canada_provinces <- ne_states(country = "Canada", returnclass = "sf") |>
-  st_crop(crop_lims)
+  filter(region_un == "Americas", name %in% c("United States of America", "Canada"))
+us_states <- ne_states(country = "United States of America", returnclass = "sf")
+canada_provinces <- ne_states(country = "Canada", returnclass = "sf")
 
 # Make plots
 final_df <- rbind(df_list[[1]], df_list[[2]], df_list[[3]])
 
 # Prepare colors
-breaks <- c(-1, -0.7, -0.4, -0.1, 0.1, 0.4, 0.7, 1)
+breaks <- seq(-1, 1, by = 0.2)
 final_df$sig_mean_class <- cut(final_df$sig_mean, breaks, include.lowest = TRUE)
 final_df <- final_df |>
   filter(n_farms >= 5) |>
@@ -105,15 +101,16 @@ final_df <- final_df |>
 # sig_mean_color <- brewer.pal(10, "RdBu")[scenario_df$sig_mean_class]
 
 # Ecoregions plot
+jpeg("figures/sens_all_loca.jpg", width = 7, height = 9, units = "in", res = 600)
 ggplot() +
-  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2) +
-  geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
+  geom_sf(data = north_america, fill = "grey85", color = "black", size = 0.2) +
+  geom_sf(data = us_states, fill = NA, color = "grey40", size = 0.3) +
+  geom_sf(data = canada_provinces, fill = NA, color = "grey40", size = 0.3) +
   geom_sf(data = final_df, mapping = aes(fill = sig_mean_class)) +
   # geom_sf(data = sap_farms, color = "black", shape = 1, size = 0.4, stroke = 0.3) +
   facet_grid(scenario ~ threshold) +
-  coord_sf(xlim = c(-99, -59), ylim = c(32, 53), expand = FALSE) +
-  scale_fill_manual("Significance Proportion", values = rev(brewer.pal(7, "PuOr"))[1:4]) +
+  coord_sf(xlim = c(-99, -59), ylim = c(32, 51.5), expand = FALSE) +
+  scale_fill_manual("Significance Proportion", values = rev(brewer.pal(10, "PuOr"))) +
   theme_minimal() +
   labs(
     # title = scenarios[i],
@@ -125,6 +122,8 @@ ggplot() +
         legend.title = element_text(size = 10),
         axis.text = element_blank(),
         axis.ticks = element_blank())
+dev.off()
+
 ggsave("figures/sens_all_loca.pdf", width = 7, height = 9) # ChatGPT suggestion
 
 # gs[[1]] <- gs[[1]] +

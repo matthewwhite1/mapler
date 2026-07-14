@@ -80,13 +80,14 @@ gs <- list()
 range_names <- c("1950 - 1979", "1980 - 2014", "2015 - 2039",
             "2040 - 2069", "2070 - 2100")
 titles <- paste(rep(scenarios, each = 5), rep(range_names, times = 5))
+my_palette <- c(rev(brewer.pal(3, "Blues")), brewer.pal(7, "OrRd"))
 for (i in 1:15) {
   gs[[i]] <- ggplot() +
     geom_spatraster(data = scenario_rasts[[i]], aes(fill = cuts), show.legend = TRUE) +
     geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
     geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
     coord_sf(xlim = c(-125.5, -66.5), ylim = c(23.875, 53.5), expand = FALSE) +
-    scale_fill_manual("Mean temperature", values = rev(brewer.pal(10, "RdBu")),
+    scale_fill_manual("Mean temperature", values = my_palette,
                       na.translate = FALSE, drop = FALSE) +
     ggtitle(titles[i]) +
     theme_minimal() +
@@ -97,13 +98,15 @@ for (i in 1:15) {
           axis.ticks = element_blank(),
           plot.title = element_text(hjust = 0.5))
 }
+jpeg("figures/mean_temp_conus_all_loca.jpg", width = 7, height = 9, units = "in", res = 600)
 (gs[[1]] + gs[[6]] + gs[[11]]) /
   (gs[[2]] + gs[[7]] + gs[[12]]) +
   (gs[[3]] + gs[[8]] + gs[[13]]) +
   (gs[[4]] + gs[[9]] + gs[[14]]) +
   (gs[[5]] + gs[[10]] + gs[[15]]) +
-  plot_layout(guides = "collect")
-ggsave("figures/mean_temp_conus_all_loca.pdf", width = 7, height = 9)
+  plot_layout(guides = "collect") &
+  theme(legend.position = "bottom")
+dev.off()
 
 wrap_plots(gs, ncol = 5, guides = "collect")
 ggsave("figures/mean_temp_conus_all_loca_wide.pdf", width = 10, height = 7)

@@ -94,9 +94,9 @@ rapp_sf$name <- sites
 # Plot
 jpeg("figures/rapp_site_locations.jpg", width = 7, height = 5, units = "in", res = 600)
 ggplot() +
-  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2, alpha = 0.7) +
-  geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
+  geom_sf(data = north_america, fill = "grey85", color = "black", size = 0.2, alpha = 0.7) +
+  geom_sf(data = us_states, fill = NA, color = "grey40", size = 0.3) +
+  geom_sf(data = canada_provinces, fill = NA, color = "grey40", size = 0.3) +
   geom_sf(data = rapp_sf, color = "orange", size = 2) +
   ggrepel::geom_label_repel(data = rapp_sf,
                             aes(label = name, geometry = geometry),
@@ -171,9 +171,9 @@ canada_provinces <- ne_states(country = "Canada", returnclass = "sf")
 # Plot
 jpeg("figures/farms_locations.jpg", width = 7, height = 5, units = "in", res = 600)
 ggplot() +
-  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2) +
-  geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
+  geom_sf(data = north_america, fill = "grey85", color = "black", size = 0.2) +
+  geom_sf(data = us_states, fill = NA, color = "grey40", size = 0.3) +
+  geom_sf(data = canada_provinces, fill = NA, color = "grey40", size = 0.3) +
   geom_sf(data = farms_sf, color = "black", size = 0.5) +
   coord_sf(xlim = c(-96, -60), ylim = c(35, 52)) +
   scale_fill_manual("Significance Proportion", values = my_palette) +
@@ -269,15 +269,11 @@ eco_regions_joined <- eco_regions_joined |>
   dplyr::filter(n_farms >= 5)
 
 # Get North America map
-crop_lims <- c(xmin = -99, ymin = 32, xmax = -59, ymax = 53)
 world <- ne_countries(scale = "medium", returnclass = "sf")
-north_america <- world %>%
-  filter(region_un == "Americas", name %in% c("United States of America", "Canada")) |>
-  st_crop(crop_lims)
-us_states <- ne_states(country = "United States of America", returnclass = "sf") |>
-  st_crop(crop_lims)
-canada_provinces <- ne_states(country = "Canada", returnclass = "sf") |>
-  st_crop(crop_lims)
+north_america <- world |>
+  filter(region_un == "Americas", name %in% c("United States of America", "Canada"))
+us_states <- ne_states(country = "United States of America", returnclass = "sf")
+canada_provinces <- ne_states(country = "Canada", returnclass = "sf")
 
 # Create discrete breaks
 all_levels <- levels(cut(seq(-1, 1, by = 0.2), seq(-1, 1, by = 0.2), include.lowest = TRUE))
@@ -303,12 +299,12 @@ my_palette <- rev(brewer.pal(10, "PuOr"))
 # Plot
 jpeg("figures/sens_eco_regions.jpg", width = 9, height = 8, units = "in", res = 600)
 ggplot() +
-  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2, alpha = 0.7) +
-  geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
+  geom_sf(data = north_america, fill = "grey85", color = "black", size = 0.2, alpha = 0.7) +
+  geom_sf(data = us_states, fill = NA, color = "grey40", size = 0.3) +
+  geom_sf(data = canada_provinces, fill = NA, color = "grey40", size = 0.3) +
   geom_sf(data = eco_regions_plot, aes(fill = cuts)) +
   geom_sf(data = farms_sf, color = "black", size = 0.5) +
-  coord_sf(xlim = c(-96, -60), ylim = c(33, 52)) +
+  coord_sf(xlim = c(-96, -60), ylim = c(33, 51)) +
   scale_fill_manual("Significance Proportion", values = setNames(my_palette, all_levels),
                     na.translate = FALSE, drop = FALSE) +
   theme_bw() +
@@ -341,15 +337,11 @@ us_counties_joined <- sens_farms(farms_coords = farms_sf, sap_prop = sap_day_acc
                                  shapefile = shapefile, group_var = variable)
 
 # Get North America map
-crop_lims <- c(xmin = -99, ymin = 32, xmax = -59, ymax = 53)
 world <- ne_countries(scale = "medium", returnclass = "sf")
-north_america <- world %>%
-  filter(region_un == "Americas", name %in% c("United States of America", "Canada")) |>
-  st_crop(crop_lims)
-us_states <- ne_states(country = "United States of America", returnclass = "sf") |>
-  st_crop(crop_lims)
-canada_provinces <- ne_states(country = "Canada", returnclass = "sf") |>
-  st_crop(crop_lims)
+north_america <- world |>
+  filter(region_un == "Americas", name %in% c("United States of America", "Canada"))
+us_states <- ne_states(country = "United States of America", returnclass = "sf")
+canada_provinces <- ne_states(country = "Canada", returnclass = "sf")
 
 # Create discrete breaks
 all_levels <- levels(cut(seq(-1, 1, by = 0.2), seq(-1, 1, by = 0.2), include.lowest = TRUE))
@@ -375,9 +367,9 @@ my_palette <- rev(brewer.pal(10, "PuOr"))
 # Plot
 jpeg("figures/sens_us_counties.jpg", width = 10, height = 9, units = "in", res = 600)
 ggplot() +
-  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2, alpha = 0.7) +
-  geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
+  geom_sf(data = north_america, fill = "grey85", color = "black", size = 0.2, alpha = 0.7) +
+  geom_sf(data = us_states, fill = NA, color = "grey40", size = 0.3) +
+  geom_sf(data = canada_provinces, fill = NA, color = "grey40", size = 0.3) +
   geom_sf(data = us_counties_plot, aes(fill = cuts)) +
   geom_sf(data = farms_sf, color = "black", size = 0.3) +
   coord_sf(xlim = c(-95, -59), ylim = c(35, 50), expand = FALSE) +
