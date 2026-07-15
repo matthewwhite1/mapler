@@ -114,7 +114,8 @@
 #' Level III North America ecoregions
 #'
 #' Level III North America ecoregions sf dataframe pulled from
-#'   [epa.gov](https://www.epa.gov/eco-research/ecoregions-north-america).
+#'   [epa.gov](https://www.epa.gov/eco-research/ecoregions-north-america). This
+#'   is simplified to a 5km resolution.
 #'
 #' @format ## `eco_regions`
 #' An sf dataframe with 2548 rows and 12 columns:

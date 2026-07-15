@@ -29,6 +29,7 @@ eco_regions
 }
 \description{
 Level III North America ecoregions sf dataframe pulled from
-\href{https://www.epa.gov/eco-research/ecoregions-north-america}{epa.gov}.
+\href{https://www.epa.gov/eco-research/ecoregions-north-america}{epa.gov}. This
+is simplified to a 5km resolution.
 }
 \keyword{datasets}
