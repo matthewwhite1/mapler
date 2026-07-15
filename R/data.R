@@ -109,3 +109,27 @@
 #' @format ## `us_states`
 #' A character vector with 50 elements.
 "us_states"
+
+
+#' Level III North America ecoregions
+#'
+#' Level III North America ecoregions sf dataframe pulled from
+#'   [epa.gov](https://www.epa.gov/eco-research/ecoregions-north-america).
+#'
+#' @format ## `eco_regions`
+#' An sf dataframe with 2548 rows and 12 columns:
+#' \describe{
+#'   \item{NA_L3CODE}{Level III region code}
+#'   \item{NA_L3NAME}{Level III region name}
+#'   \item{NA_L2CODE}{Level II region code}
+#'   \item{NA_L2NAME}{Level II region name}
+#'   \item{NA_L1CODE}{Level I region code}
+#'   \item{NA_L1NAME}{Level I region name}
+#'   \item{NA_L3KEY}{Level III combination of region code and name}
+#'   \item{NA_L2KEY}{Level II combination of region code and name}
+#'   \item{NA_L1KEY}{Level I combination of region code and name}
+#'   \item{Shape_Leng}{Length of region}
+#'   \item{Shape_Area}{Area of region}
+#'   \item{geometry}{sf geometry polygons}
+#' }
+"eco_regions"

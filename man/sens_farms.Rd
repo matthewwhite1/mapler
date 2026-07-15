@@ -59,7 +59,7 @@ test_loca_file <- system.file("extdata", "test_loca_sap_day.tif",
 sap_prop <- terra::rast(test_loca_file)
 
 # Read in eco regions shape file
-shapefile <- sf::read_sf("Data_Clean/NA_Eco_Level3/NA_CEC_Eco_Level3.shp")
+shapefile <- eco_regions
 variable <- names(shapefile)[2]
 
 # Get proportion of Sen's significance at each eco region

@@ -45,7 +45,7 @@ sap_prop <- terra::rast(test_loca_file)
 farms_sf <- get_sens_farms(farms_sf, sap_prop)
 
 # Read in eco regions shape file
-shapefile <- sf::read_sf("Data_Clean/NA_Eco_Level3/NA_CEC_Eco_Level3.shp")
+shapefile <- eco_regions
 variable <- names(shapefile)[2]
 
 # Get mean significance by eco region
