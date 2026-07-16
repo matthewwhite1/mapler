@@ -5,3 +5,6 @@
 .DS_Store
 .quarto
 Data_Raw/
+doc_latex/
+Rmd/
+Data_Clean/

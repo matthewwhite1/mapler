@@ -176,7 +176,6 @@ ggplot() +
   geom_sf(data = canada_provinces, fill = NA, color = "grey40", size = 0.3) +
   geom_sf(data = farms_sf, color = "black", size = 0.5) +
   coord_sf(xlim = c(-96, -60), ylim = c(35, 52)) +
-  scale_fill_manual("Significance Proportion", values = my_palette) +
   theme_minimal() +
   labs(
     x = "Longitude",
@@ -257,7 +256,7 @@ sap_day_access <- terra::rast("F:/Data/LOCA2/sugar_sap_days/ACCESS-CM2_run1_ssp5
 farms_sf <- sf::st_as_sf(farms_coords, coords = c("lon", "lat"), crs = 4326)
 
 # Read in eco regions shape file
-shapefile <- sf::read_sf("Data_Clean/NA_Eco_Level3/NA_CEC_Eco_Level3.shp")
+shapefile <- eco_regions
 variable <- names(shapefile)[2]
 
 # Get proportion of Sen's significance at each eco region

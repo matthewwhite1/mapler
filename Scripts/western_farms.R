@@ -47,7 +47,6 @@ western_farms_sens <- get_sens_farms(western_farms_sf, sap_day_access)
 ggplot() +
   geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2) +
   geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
   geom_sf(data = western_farms_sens, mapping = aes(color = sens_estimate), size = 2) +
   scale_color_viridis_c() +
   scale_y_continuous(limits = c(34, 48.3)) +
