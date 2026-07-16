@@ -40,6 +40,14 @@ both historic climate data and future climate projections.
 Once data is downloaded, it can be loaded into R using `loca_t_rast()` or
 `prism_t_rast()`, "t" meaning temperature. These functions take filepaths
 of where the data is downloaded and return the tmin and tmax raster stacks.
+The following code chunk shows how to use `loca_t_rast()`, assuming you
+downloaded LOCA2 data with the `download_loca2()` function and placed this data
+into a folder called "LOCA2".
+
+```{r loca_t_rast, eval = FALSE}
+# Load in rasters
+loca_rast <- loca_t_rast("LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1/")
+```
 
 ## Calculating Sap Days
 
@@ -55,9 +63,6 @@ can be used for future climate projection with LOCA2 data.
 The `sap_day()` function can be used with LOCA2 data like so:
 
 ```{r sap_day, eval = FALSE}
-# Load in rasters
-loca_rast <- loca_t_rast("F:/Data/LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1/")
-
 # Calculate yearly sap days (LOCA2 temps are in Kelvin)
 k_upper <- 2.2 + 273.15
 k_lower <- -1.1 + 273.15

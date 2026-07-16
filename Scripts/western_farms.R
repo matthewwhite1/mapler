@@ -14,27 +14,25 @@ western_farms_sf <- western_farms_sf |>
   mutate(species = str_remove(species, " maple"))
 
 # Get North America map
-crop_lims <- c(xmin = -118, ymin = 32, xmax = -94, ymax = 50)
 world <- ne_countries(scale = "medium", returnclass = "sf")
 north_america <- world |>
-  filter(region_un == "Americas", name %in% c("United States of America", "Canada")) |>
-  st_crop(crop_lims)
-us_states <- ne_states(country = "United States of America", returnclass = "sf") |>
-  st_crop(crop_lims)
+  filter(region_un == "Americas", name %in% c("United States of America", "Canada"))
+us_states <- ne_states(country = "United States of America", returnclass = "sf")
 
 # Plot farm locations
+jpeg("figures/western_farms_locations.jpg", width = 7, height = 9, units = "in", res = 600)
 ggplot() +
-  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2) +
-  geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-  # geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = western_farms_sf, mapping = aes(color = species), size = 1, alpha = 1) +
+  geom_sf(data = north_america, fill = "grey85", color = "black", size = 0.2, alpha = 0.7) +
+  geom_sf(data = us_states, fill = NA, color = "grey40", size = 0.3) +
+  geom_sf(data = western_farms_sf, mapping = aes(color = species), size = 1.5, alpha = 1) +
   scale_color_brewer("Species", palette = "Dark2") +
-  scale_y_continuous(limits = c(34, 48.3)) +
+  coord_sf(xlim = c(-118, -93), ylim = c(32, 49), expand = FALSE) +
+  scale_y_continuous(breaks = seq(34, 48, by = 2)) +
   theme_bw() +
   xlab("Longitude") +
   ylab("Latitude") +
   theme(text = element_text(size = 16))
-ggsave("figures/western_farms_locations.pdf", width = 7, height = 9)
+dev.off()
 
 
 ### Just one LOCA2 model ###
@@ -145,14 +143,14 @@ final_df <- final_df |>
                             norway = "Norway"))
 
 # Plot
+jpeg("figures/western_sens_significance.jpg", width = 7, height = 9, units = "in", res = 600)
 ggplot() +
-  geom_sf(data = north_america, fill = "grey95", color = "black", size = 0.2) +
-  geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
-  geom_sf(data = final_df, mapping = aes(color = significant_bins), size = 1) +
+  geom_sf(data = north_america, fill = "grey85", color = "black", size = 0.2) +
+  geom_sf(data = us_states, fill = NA, color = "grey40", size = 0.3) +
+  geom_sf(data = final_df, mapping = aes(color = significant_bins), size = 1.5) +
   facet_grid(scenario ~ threshold) +
   scale_color_manual("Significance Average", values = brewer.pal(8, "PuOr")[8:5]) +
-  scale_y_continuous(limits = c(34, 48.3)) +
+  coord_sf(xlim = c(-118, -93), ylim = c(32, 49), expand = FALSE) +
   theme_minimal() +
   xlab("") +
   ylab("") +
@@ -161,4 +159,4 @@ ggplot() +
         legend.title = element_text(size = 10),
         axis.text = element_blank(),
         axis.ticks = element_blank())
-ggsave("figures/western_sens_significance.pdf", width = 7, height = 9)
+dev.off()

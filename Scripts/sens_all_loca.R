@@ -62,7 +62,7 @@ for (l in 1:3) {
     }
 
     # Calculate average significance per scenario
-    sig_rast_list[[count]] <- terra::app(significants, mean)
+    sig_rast_list[[count]] <- terra::app(significants, mean, na.rm = TRUE)
     count <- count + 1
   }
 }
@@ -119,8 +119,8 @@ gs <- list()
 for (i in 1:9) {
   gs[[i]] <- ggplot() +
     geom_spatraster(data = sig_rast_list[[i]], aes(fill = cuts), show.legend = TRUE) +
-    geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-    geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
+    geom_sf(data = us_states, fill = NA, color = "grey40", size = 0.3) +
+    geom_sf(data = canada_provinces, fill = NA, color = "grey40", size = 0.3) +
     scale_fill_manual("Significance mean", values = brewer.pal(10, "PuOr")[10:3],
                       na.translate = FALSE, drop = FALSE) +
     coord_sf(xlim = c(-125.5, -66.5), ylim = c(23.875, 53.5), expand = FALSE) +
@@ -133,9 +133,10 @@ for (i in 1:9) {
           axis.ticks = element_blank(),
           plot.title = element_text(hjust = 0.5))
 }
+jpeg("figures/sens_conus_all_loca.jpg", width = 7, height = 9, units = "in", res = 600)
 (gs[[1]] + gs[[4]] + gs[[7]]) /
   (gs[[2]] + gs[[5]] + gs[[8]]) /
   (gs[[3]] + gs[[6]] + gs[[9]]) +
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom")
-ggsave("figures/sens_conus_all_loca.pdf", width = 7, height = 9)
+dev.off()

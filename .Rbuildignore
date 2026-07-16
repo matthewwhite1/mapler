@@ -9,3 +9,5 @@
 ^Data\_Clean
 ^Rmd
 ^\.github$
+^doc_latex
+^figures

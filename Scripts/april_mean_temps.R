@@ -137,8 +137,8 @@ gs <- list()
 for (i in 1:3) {
   gs[[i]] <- ggplot() +
     geom_spatraster(data = sig_rast_list[[i]], aes(fill = cuts), show.legend = TRUE) +
-    geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-    geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
+    geom_sf(data = us_states, fill = NA, color = "grey40", size = 0.3) +
+    geom_sf(data = canada_provinces, fill = NA, color = "grey40", size = 0.3) +
     scale_fill_manual("Significance mean", values = brewer.pal(7, "PuOr")[3:1],
                       na.translate = FALSE, drop = FALSE) +
     coord_sf(xlim = c(-125.5, -66.5), ylim = c(23.875, 53.5), expand = FALSE) +
@@ -151,10 +151,11 @@ for (i in 1:3) {
           axis.ticks = element_blank(),
           plot.title = element_text(hjust = 0.5))
 }
+jpeg("figures/april_sens.jpg", width = 9, height = 7, units = "in", res = 600)
 (gs[[1]] + gs[[2]] + gs[[3]]) +
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom")
-ggsave("figures/april_sens.pdf", width = 7, height = 9)
+dev.off()
 ########## Sen's stuff ##########
 
 
@@ -233,12 +234,12 @@ gs <- list()
 range_names <- c("1950 - 1979", "1980 - 2014", "2015 - 2039",
                  "2040 - 2069", "2070 - 2100")
 titles <- paste(rep(scenarios, each = 5), rep(range_names, times = 5))
-my_palette <- c(rev(brewer.pal(3, "Blues")), brewer.pal(7, "OrRd"))
+my_palette <- c(brewer.pal(3, "Blues")[2:1], brewer.pal(7, "OrRd"))
 for (i in 1:15) {
   gs[[i]] <- ggplot() +
     geom_spatraster(data = scenario_rasts[[i]], aes(fill = cuts), show.legend = TRUE) +
-    geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
-    geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
+    geom_sf(data = us_states, fill = NA, color = "grey40", size = 0.3) +
+    geom_sf(data = canada_provinces, fill = NA, color = "grey40", size = 0.3) +
     coord_sf(xlim = c(-125.5, -66.5), ylim = c(23.875, 53.5), expand = FALSE) +
     scale_fill_manual("Mean temperature", values = my_palette,
                       na.translate = FALSE, drop = FALSE) +

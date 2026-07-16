@@ -69,7 +69,7 @@ for (i in 1:3) {
     geom_spatraster(data = sap_diff, aes(fill = cuts), alpha = 0.8, show.legend = TRUE) +
     geom_sf(data = us_states, fill = NA, color = "darkgray", size = 0.3) +
     geom_sf(data = canada_provinces, fill = NA, color = "darkgray", size = 0.3) +
-    scale_fill_manual("Difference", values = rev(brewer.pal(7, "YlGn")),
+    scale_fill_manual("Difference", values = rev(brewer.pal(7, "PuRd")),
                       na.translate = FALSE, drop = FALSE) +
     coord_sf(xlim = c(-125.5, -66.5), ylim = c(23.875, 53.5), expand = FALSE) +
     theme_minimal() +
@@ -128,9 +128,10 @@ ggplot(sap_diff_farms_west_long, aes(x = elevation, y = diff, color = species)) 
   facet_wrap(~ scenario) +
   scale_x_continuous(breaks = seq(0, 2500, by = 500), limits = c(0, 2500)) +
   scale_y_continuous(breaks = seq(-0.15, 0, by = 0.025), limits = c(-0.15, 0)) +
+  scale_color_brewer(palette = "Dark2") +
   theme_bw() +
   xlab("Elevation") +
-  ylab("Sap Difference") +
+  ylab("Sap Day Difference") +
   labs(color = "Species") +
   theme(text = element_text(size = 14))
 dev.off()
@@ -155,7 +156,8 @@ sap_diff_farms_east <- data.frame(ssp245 = sap_diff_farms_east_1$mean,
                                   ssp585 = sap_diff_farms_east_3$mean,
                                   elevation = elevation_farms_east$Elevation,
                                   state = eastern_farms_sf$state) |>
-  drop_na()
+  drop_na() |>
+  filter(state != "CO")
 
 # Make longer for ggplot
 sap_diff_farms_east_long <- sap_diff_farms_east |>
@@ -165,14 +167,13 @@ sap_diff_farms_east_long <- sap_diff_farms_east |>
 
 # Plot
 jpeg("figures/sap_diff_farms_east.jpg", width = 9, height = 4, units = "in", res = 600)
-ggplot(sap_diff_farms_east_long, aes(x = elevation, y = diff, color = state)) +
+ggplot(sap_diff_farms_east_long, aes(x = elevation, y = diff)) +
   geom_point() +
   facet_wrap(~ scenario) +
-  scale_x_continuous(breaks = seq(0, 2000, by = 500), limits = c(0, 2000)) +
+  scale_x_continuous(breaks = seq(0, 1200, by = 300), limits = c(0, 1200)) +
   scale_y_continuous(breaks = seq(-0.14, 0.02, by = 0.02), limits = c(-0.14, 0.02)) +
   theme_bw() +
   xlab("Elevation") +
-  ylab("Sap Difference") +
-  labs(color = "State") +
+  ylab("Sap Day Difference") +
   theme(text = element_text(size = 14))
 dev.off()

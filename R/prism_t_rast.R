@@ -10,7 +10,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' prism_t_rast("D:/Data/PRISM", folders = TRUE)
+#' # Assuming you have PRISM data in a folder called "PRISM"
+#' prism_t_rast("PRISM", folders = TRUE)
 #' }
 #' @export
 prism_t_rast <- function(filepath, folders = FALSE) {

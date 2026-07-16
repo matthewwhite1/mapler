@@ -24,7 +24,9 @@ Load LOCA2 tmax and tmin files into rasters
 }
 \examples{
 \dontrun{
-loca_t_rast("D:/Data/LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1",
+# Assuming you used the download_loca2() function and placed the output
+# in a folder called LOCA2
+loca_t_rast("LOCA2/ACCESS-CM2/0p0625deg/r1i1p1f1",
             c("historical", "ssp245"))
 }
 }
