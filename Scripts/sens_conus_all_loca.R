@@ -134,7 +134,8 @@ for (i in 1:9) {
     geom_spatraster(data = sig_rast_list[[i]], aes(fill = cuts), show.legend = TRUE) +
     geom_sf(data = us_states, fill = NA, color = "grey40", size = 0.3) +
     geom_sf(data = canada_provinces, fill = NA, color = "grey40", size = 0.3) +
-    scale_fill_manual("Significance mean", values = c(brewer.pal(10, "PuOr")[10:3], "grey20"),
+    scale_fill_manual("Significance mean", values = c(brewer.pal(10, "PuOr")[10:3],
+                                                      brewer.pal(9, "RdPu")[4]),
                       na.translate = FALSE, drop = FALSE,
                       labels = c(manual_breaks[-9], "NA")) +
     coord_sf(xlim = c(-125.5, -66.5), ylim = c(23.875, 53.5), expand = FALSE) +
